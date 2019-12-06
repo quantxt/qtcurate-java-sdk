@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <tika-core.version>1.18</tika-core.version>
+        <tika-core.version>1.22</tika-core.version>
         <httpclient.version>4.5.10</httpclient.version>
         <httpmime.version>4.5.10</httpmime.version>
         <commons-io.version>2.6</commons-io.version>
