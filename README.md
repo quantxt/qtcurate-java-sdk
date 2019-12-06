@@ -1,1 +1,1 @@
-# qt-sdk-demo
+# Java SDK for QTCurate
