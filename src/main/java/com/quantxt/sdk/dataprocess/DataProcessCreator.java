@@ -25,10 +25,10 @@ public class DataProcessCreator extends Creator<DataProcess> {
      * Dictionary types.
      */
     public enum DictionaryType {
-        DOUBLE("DOUBLE"),
-        MONEY("MONEY"),
+        NUMBER("DOUBLE"),
         STRING("STRING"),
-        DATETIME("DATETIME");
+        DATETIME("DATETIME"),
+        NONE("NONE");
 
         private final String type;
 
@@ -41,25 +41,6 @@ public class DataProcessCreator extends Creator<DataProcess> {
         }
     }
 
-    /**
-     * Data process modes.
-     */
-    public enum Mode {
-        MODE_1(1),
-        MODE_2(2),
-        MODE_3(3);
-
-        private final Integer value;
-
-        Mode(final Integer value) {
-            this.value = value;
-        }
-
-        public String toString() {
-            return value.toString();
-        }
-    }
-
     @JsonProperty("get_phrases")
     private Boolean autoTag;
     private Integer maxTokenPerUtt = 500;
@@ -68,7 +49,6 @@ public class DataProcessCreator extends Creator<DataProcess> {
     private String title;
     @JsonProperty("stitle")
     private String cmd;
-    private Integer mode = Mode.MODE_3.value;
     private List<String> dictionaries = new ArrayList<>();
     private List<String> files = new ArrayList<>();
 
@@ -137,11 +117,6 @@ public class DataProcessCreator extends Creator<DataProcess> {
         this.dictionaries = dictionaries.entrySet().stream()
                 .map(entry -> this.formatDictionary(entry.getKey(), entry.getValue()))
                 .collect(toList());
-        return this;
-    }
-
-    public DataProcessCreator mode(Mode mode) {
-        this.mode = mode.value;
         return this;
     }
 
