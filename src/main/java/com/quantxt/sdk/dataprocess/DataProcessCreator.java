@@ -14,9 +14,6 @@ import com.quantxt.sdk.resource.Creator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import static java.util.stream.Collectors.toList;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class DataProcessCreator extends Creator<DataProcess> {
@@ -49,7 +46,7 @@ public class DataProcessCreator extends Creator<DataProcess> {
     private String title;
     @JsonProperty("stitle")
     private String cmd;
-    private List<String> dictionaries = new ArrayList<>();
+    private List<SearchRule> searchDictionaries = new ArrayList<>();
     private List<String> files = new ArrayList<>();
 
     public DataProcessCreator(String title) {
@@ -98,25 +95,25 @@ public class DataProcessCreator extends Creator<DataProcess> {
         return this;
     }
 
-    public DataProcessCreator addDictionary(String dictionary) {
-        this.dictionaries.add(dictionary);
+    /**
+     * Adds a search rule.
+     *
+     * @param searchRule Search rule.
+     * @return this
+     */
+    public DataProcessCreator addRule(SearchRule searchRule) {
+        this.searchDictionaries.add(searchRule);
         return this;
     }
 
-    public DataProcessCreator addDictionary(String dictionary, DictionaryType type) {
-        this.dictionaries.add(this.formatDictionary(dictionary, type));
-        return this;
-    }
-
-    public DataProcessCreator dictionaries(List<String> dictionaries) {
-        this.dictionaries = dictionaries;
-        return this;
-    }
-
-    public DataProcessCreator dictionaries(Map<String, DictionaryType> dictionaries) {
-        this.dictionaries = dictionaries.entrySet().stream()
-                .map(entry -> this.formatDictionary(entry.getKey(), entry.getValue()))
-                .collect(toList());
+    /**
+     * Specifies the search rules.
+     *
+     * @param searchRules Search rules.
+     * @return this
+     */
+    public DataProcessCreator rules(List<SearchRule> searchRules) {
+        this.searchDictionaries = searchRules;
         return this;
     }
 

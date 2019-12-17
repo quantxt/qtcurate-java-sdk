@@ -3,6 +3,7 @@ package com.quantxt.sdk.sample;
 import com.quantxt.sdk.client.QT;
 import com.quantxt.sdk.dataprocess.DataProcess;
 import com.quantxt.sdk.dataprocess.DataProcessCreator;
+import com.quantxt.sdk.dataprocess.SearchRule;
 import com.quantxt.sdk.dictionary.Dictionary;
 
 import java.io.FileNotFoundException;
@@ -38,11 +39,13 @@ public class MiningContentWithDictionaries {
 
         List<String> documentUUids = getDocumentUuids();
 
+        Dictionary dictionary = getDateDictionary();
+
         // 2- Configure and kick off the Parser job. This will prepare the document for keyword and phrase search
         DataProcess dataProcess = DataProcess.creator("My parser job " + Instant.now())
                 .excludeUttWithoutEntities(true)
-                .addDictionary("", DataProcessCreator.DictionaryType.NUMBER)
-                .addDictionary("", DataProcessCreator.DictionaryType.DATETIME)
+                .addRule(new SearchRule(dictionary, DataProcessCreator.DictionaryType.NUMBER))
+                .addRule(new SearchRule(dictionary, DataProcessCreator.DictionaryType.DATETIME))
                 .autoTag(false)
                 .files(documentUUids)
                 .create();
