@@ -30,6 +30,15 @@ public class Dictionary extends Resource {
     }
 
     /**
+     * Create a DictionaryUpdater to execute update.
+     *
+     * @return DictionaryUpdater capable of executing the update
+     */
+    public static DictionaryUpdater updater(String id) {
+        return new DictionaryUpdater(id);
+    }
+
+    /**
      * Create a DictionaryFetcher to execute fetch.
      *
      * @param id The ID that identifies the resource to fetch
@@ -111,13 +120,13 @@ public class Dictionary extends Resource {
         this.entries = entries;
     }
 
-    static class Entry {
+    public static class Entry {
 
         private String key;
         private String value;
 
         @JsonCreator
-        Entry(@JsonProperty("key") final String key,
+        public Entry(@JsonProperty("key") final String key,
               @JsonProperty("value") final String value) {
             this.key = key;
             this.value = value;
