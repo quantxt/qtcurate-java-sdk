@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quantxt.sdk.exception.QTApiConnectionException;
 import com.quantxt.sdk.exception.QTApiException;
@@ -34,7 +35,19 @@ public class DataProcess extends Resource {
      *
      * @return DataProcessReader capable of executing the read
      */
-    public static DataProcessReader reader() { return new DataProcessReader(); }
+    public static DataProcessReader reader() {
+        return new DataProcessReader();
+    }
+
+    /**
+     * Create a DataProcessFetcher to execute fetch.
+     *
+     * @param index The ID that identifies the resource to fetch
+     * @return DataProcessFetcher capable of executing the fetch
+     */
+    public static DataProcessFetcher fetcher(String index) {
+        return new DataProcessFetcher(index);
+    }
 
     /**
      * Create a DataProcessDeleter to execute delete.
@@ -64,6 +77,27 @@ public class DataProcess extends Resource {
     }
 
     /**
+     * Converts a JSON InputStream from element into a DataProcess object using the provided ObjectMapper.
+     *
+     * @param json         Raw JSON InputStream
+     * @param path         Path to element
+     * @param objectMapper Jackson ObjectMapper
+     * @return DataProcess object represented by the provided JSON
+     */
+    public static DataProcess fromJson(final InputStream json, final String path, final ObjectMapper objectMapper) {
+        try {
+            JsonNode jsonNode = objectMapper.readValue(json, JsonNode.class);
+            JsonNode metaNode = jsonNode.get(path);
+
+            return objectMapper.treeToValue(metaNode, DataProcess.class);
+        } catch (final JsonMappingException | JsonParseException e) {
+            throw new QTApiException(e.getMessage(), e);
+        } catch (final IOException e) {
+            throw new QTApiConnectionException(e.getMessage(), e);
+        }
+    }
+
+    /**
      * Converts a JSON InputStream into a list of DataProcess objects using the provided ObjectMapper.
      *
      * @param json         Raw JSON InputStream
@@ -82,11 +116,30 @@ public class DataProcess extends Resource {
 
     private String index;
     private String title;
+    private Boolean autoTag;
+    private Integer maxTokenPerUtt;
+    private Integer minTokenPerUtt;
+    private boolean excludeUttWithoutEntities;
+    private List<SearchRule> searchDictionaries;
+    private List<String> files;
 
     @JsonCreator
-    private DataProcess(@JsonProperty("index") final String index, @JsonProperty("title") final String title) {
+    private DataProcess(@JsonProperty("index") final String index,
+                        @JsonProperty("title") final String title,
+                        @JsonProperty("get_phrases") final Boolean autoTag,
+                        @JsonProperty("maxTokenPerUtt") final Integer maxTokenPerUtt,
+                        @JsonProperty("minTokenPerUtt") final Integer minTokenPerUtt,
+                        @JsonProperty("excludeUttWithoutEntities") final boolean excludeUttWithoutEntities,
+                        @JsonProperty("searchDictionaries") final List<SearchRule> searchDictionaries,
+                        @JsonProperty("files") final List<String> files) {
         this.index = index;
         this.title = title;
+        this.autoTag = autoTag;
+        this.maxTokenPerUtt = maxTokenPerUtt;
+        this.minTokenPerUtt = minTokenPerUtt;
+        this.excludeUttWithoutEntities = excludeUttWithoutEntities;
+        this.searchDictionaries = searchDictionaries;
+        this.files = files;
     }
 
     /**
@@ -107,11 +160,71 @@ public class DataProcess extends Resource {
         return title;
     }
 
+    /**
+     * Returns autoTag.
+     *
+     * @return autoTag.
+     */
+    public Boolean getAutoTag() {
+        return autoTag;
+    }
+
+    /**
+     * Returns maxTokenPerUtt.
+     *
+     * @return maxTokenPerUtt.
+     */
+    public Integer getMaxTokenPerUtt() {
+        return maxTokenPerUtt;
+    }
+
+    /**
+     * Returns minTokenPerUtt.
+     *
+     * @return minTokenPerUtt.
+     */
+    public Integer getMinTokenPerUtt() {
+        return minTokenPerUtt;
+    }
+
+    /**
+     * Returns excludeUttWithoutEntities.
+     *
+     * @return excludeUttWithoutEntities.
+     */
+    public boolean isExcludeUttWithoutEntities() {
+        return excludeUttWithoutEntities;
+    }
+
+    /**
+     * Returns searchDictionaries.
+     *
+     * @return searchDictionaries.
+     */
+    public List<SearchRule> getSearchDictionaries() {
+        return searchDictionaries;
+    }
+
+    /**
+     * Returns fields.
+     *
+     * @return fields.
+     */
+    public List<String> getFiles() {
+        return files;
+    }
+
     @Override
     public String toString() {
         return "DataProcess{" +
                 "index='" + index + '\'' +
                 ", title='" + title + '\'' +
+                ", autoTag=" + autoTag +
+                ", maxTokenPerUtt=" + maxTokenPerUtt +
+                ", minTokenPerUtt=" + minTokenPerUtt +
+                ", excludeUttWithoutEntities=" + excludeUttWithoutEntities +
+                ", searchDictionaries=" + searchDictionaries +
+                ", files=" + files +
                 '}';
     }
 }
