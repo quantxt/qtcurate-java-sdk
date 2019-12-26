@@ -63,7 +63,6 @@
 
 
     <properties>
-        <tika-core.version>1.23</tika-core.version>
         <httpclient.version>4.5.10</httpclient.version>
         <httpmime.version>4.5.10</httpmime.version>
         <commons-io.version>2.6</commons-io.version>
@@ -73,11 +72,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.apache.tika</groupId>
-            <artifactId>tika-core</artifactId>
-            <version>${tika-core.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
