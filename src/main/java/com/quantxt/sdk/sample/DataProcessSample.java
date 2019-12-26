@@ -12,9 +12,13 @@ public class DataProcessSample {
     public static void main(String[] args) {
         QT.init(API_KEY);
 
-       // Reading all current indices
+        // Reading all current indices
         List<DataProcess> dataProcessList = DataProcess.reader().read();
 
         System.out.println("Read data process list: " + dataProcessList);
+
+        DataProcess dataProcess = DataProcess.fetcher(dataProcessList.get(0).getIndex()).fetch();
+
+        System.out.println("Fetched data process list: " + dataProcess);
     }
 }
