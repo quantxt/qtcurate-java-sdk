@@ -9,7 +9,6 @@ import com.quantxt.sdk.dictionary.Dictionary;
 import com.quantxt.sdk.file.SearchDocument;
 import com.quantxt.sdk.progress.Progress;
 import com.quantxt.sdk.search.Search;
-import com.quantxt.sdk.search.SearchExporter;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -80,13 +79,19 @@ public class SearchWithDocumentSample {
         // Sleep so that data gets to the ES.
         Thread.sleep(5000);
 
-        byte[] exportData = Search.exporter(dataProcess.getIndex())
-                .format(SearchExporter.Format.XLSX)
+        byte[] xlsxExportData = Search.xlsxExporter(dataProcess.getIndex())
                 .export();
         File xlsxExport = new File(dataProcess.getIndex() + ".xlsx");
         OutputStream outStream = new FileOutputStream(xlsxExport);
-        outStream.write(exportData);
-        System.out.println(String.format("Exported %s bytes of data", exportData.length));
+        outStream.write(xlsxExportData);
+        System.out.println(String.format("Exported %s bytes of XLSX data", xlsxExportData.length));
+
+        byte[] jsonExportData = Search.jsonExporter(dataProcess.getIndex())
+                .export();
+        File jsonExport = new File(dataProcess.getIndex() + ".json");
+        outStream = new FileOutputStream(jsonExport);
+        outStream.write(jsonExportData);
+        System.out.println(String.format("Exported %s bytes of JSON data", jsonExportData.length));
 
         boolean deleted = DataProcess.deleter(dataProcess.getIndex()).delete();
         System.out.println(String.format("Data process %s deleted %s", dataProcess.getIndex(), deleted));

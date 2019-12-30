@@ -20,24 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class SearchExporter extends Exporter<Search> {
-
-    /**
-     * Export format.
-     */
-    public enum Format {
-        XLSX("xlsx");
-
-        private final String format;
-
-        Format(final String format) {
-            this.format = format;
-        }
-
-        public String toString() {
-            return format;
-        }
-    }
+public class XlsxSearchExporter extends Exporter<Search> {
 
     /**
      * Available sort properties.
@@ -76,8 +59,6 @@ public class SearchExporter extends Exporter<Search> {
 
     @JsonIgnore
     private String id;
-    @JsonIgnore
-    private Format format = Format.XLSX;
     private String query;
     @JsonProperty("sort")
     private Sort sortBy = Sort.DATE;
@@ -91,19 +72,8 @@ public class SearchExporter extends Exporter<Search> {
     private Integer limit = 5000;
     private List<String> columns = new ArrayList<>();
 
-    public SearchExporter(String id) {
+    public XlsxSearchExporter(String id) {
         this.id = id;
-    }
-
-    /**
-     * The format of the export.
-     *
-     * @param format Export format.
-     * @return this
-     */
-    public SearchExporter format(Format format) {
-        this.format = format;
-        return this;
     }
 
     /**
@@ -112,7 +82,7 @@ public class SearchExporter extends Exporter<Search> {
      * @param query Export filtering query.
      * @return this
      */
-    public SearchExporter query(String query) {
+    public XlsxSearchExporter query(String query) {
         this.query = query;
         return this;
     }
@@ -123,7 +93,7 @@ public class SearchExporter extends Exporter<Search> {
      * @param sortBy Export sort by property.
      * @return this
      */
-    public SearchExporter sortBy(Sort sortBy) {
+    public XlsxSearchExporter sortBy(Sort sortBy) {
         this.sortBy = sortBy;
         return this;
     }
@@ -134,7 +104,7 @@ public class SearchExporter extends Exporter<Search> {
      * @param sortOrder Export sort order.
      * @return this
      */
-    public SearchExporter sortOrder(SortOrder sortOrder) {
+    public XlsxSearchExporter sortOrder(SortOrder sortOrder) {
         this.sortOrder = sortOrder;
         return this;
     }
@@ -145,7 +115,7 @@ public class SearchExporter extends Exporter<Search> {
      * @param from Export data from date.
      * @return this
      */
-    public SearchExporter from(Date from) {
+    public XlsxSearchExporter from(Date from) {
         this.from = from;
         return this;
     }
@@ -156,7 +126,7 @@ public class SearchExporter extends Exporter<Search> {
      * @param to Export data to date.
      * @return this
      */
-    public SearchExporter to(Date to) {
+    public XlsxSearchExporter to(Date to) {
         this.to = to;
         return this;
     }
@@ -167,7 +137,7 @@ public class SearchExporter extends Exporter<Search> {
      * @param limit Export results number limit.
      * @return this
      */
-    public SearchExporter limit(Integer limit) {
+    public XlsxSearchExporter limit(Integer limit) {
         this.limit = limit;
         return this;
     }
@@ -178,7 +148,7 @@ public class SearchExporter extends Exporter<Search> {
      * @param columns Columns to be included in the export.
      * @return this
      */
-    public SearchExporter columns(List<String> columns) {
+    public XlsxSearchExporter columns(List<String> columns) {
         this.columns = columns;
         return this;
     }
@@ -189,7 +159,7 @@ public class SearchExporter extends Exporter<Search> {
      * @param filters Filters for export.
      * @return this
      */
-    public SearchExporter filters(List<String> filters) {
+    public XlsxSearchExporter filters(List<String> filters) {
         this.filters = filters;
         return this;
     }
@@ -197,13 +167,13 @@ public class SearchExporter extends Exporter<Search> {
 
     @Override
     public byte[] export(QTRestClient client) {
-        Request request = new Request(HttpMethod.POST, String.format("/reports/%s/%s", this.id, this.format));
+        Request request = new Request(HttpMethod.POST, String.format("/reports/%s/xlsx", this.id));
         addPayload(request, client);
 
         Response response = client.request(request);
 
         if (response == null) {
-            throw new QTApiConnectionException("Search export failed: Unable to connect to server");
+            throw new QTApiConnectionException("Xlsx search export failed: Unable to connect to server");
         } else if (!QTRestClient.SUCCESS.test(response.getStatusCode())) {
             QTRestException restException = QTRestException.fromJson(response.getStream(), client.getObjectMapper());
             if (restException == null) {
@@ -221,7 +191,7 @@ public class SearchExporter extends Exporter<Search> {
         try {
             return IOUtils.toByteArray(response.getStream());
         } catch (IOException e) {
-            throw new QTApiException("Search export failed. Unable to read the data.", e);
+            throw new QTApiException("Xlsx search export failed. Unable to read the data.", e);
         }
     }
 

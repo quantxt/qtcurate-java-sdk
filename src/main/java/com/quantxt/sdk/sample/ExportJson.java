@@ -8,22 +8,21 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class ExportXlsx {
+public class ExportJson {
 
     private static final String API_KEY = "123456";
-
 
     public static void main(String[] args) throws IOException {
         QT.init(API_KEY);
 
         String index = "my_data_container";
 
-        byte[] exportData = Search.xlsxExporter(index)
+        byte[] exportData = Search.jsonExporter(index)
                 .export();
-        File xlsxExport = new File("export.xlsx");
+        File jsonExport = new File("export.json");
 
-        OutputStream outStream = new FileOutputStream(xlsxExport);
+        OutputStream outStream = new FileOutputStream(jsonExport);
         outStream.write(exportData);
-        System.out.println(String.format("Exported %s bytes of data in export.xlsx", exportData.length));
+        System.out.println(String.format("Exported %s bytes of data in export.json", exportData.length));
     }
 }
