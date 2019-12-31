@@ -1,6 +1,5 @@
 package com.quantxt.sdk.client;
 
-import com.google.common.collect.Lists;
 import com.quantxt.sdk.exception.QTApiException;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -20,6 +19,7 @@ import org.apache.http.message.BasicHeader;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -41,10 +41,9 @@ public class NetworkHttpClient extends HttpClient {
                 .setSocketTimeout(SOCKET_TIMEOUT)
                 .build();
 
-        Collection<Header> headers = Lists.newArrayList(
-                new BasicHeader(HttpHeaders.ACCEPT, "application/json"),
-                new BasicHeader(HttpHeaders.ACCEPT_ENCODING, "utf-8")
-        );
+        Collection<Header> headers = new ArrayList<>();
+        headers.add(new BasicHeader(HttpHeaders.ACCEPT, "application/json"));
+        headers.add(new BasicHeader(HttpHeaders.ACCEPT_ENCODING, "utf-8"));
 
         org.apache.http.impl.client.HttpClientBuilder clientBuilder = HttpClientBuilder.create();
 

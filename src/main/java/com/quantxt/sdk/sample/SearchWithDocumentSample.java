@@ -1,6 +1,5 @@
 package com.quantxt.sdk.sample;
 
-import com.google.common.collect.Lists;
 import com.quantxt.sdk.client.QT;
 import com.quantxt.sdk.dataprocess.DataProcess;
 import com.quantxt.sdk.dataprocess.DataProcessCreator;
@@ -17,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,11 +55,13 @@ public class SearchWithDocumentSample {
                 .create();
 
         SearchRule rule = new SearchRule(dictionary, DataProcessCreator.DictionaryType.NUMBER);
+        List<String> files = new ArrayList<>();
+        files.add(searchDocument.getUuid());
 
         DataProcess dataProcess = DataProcess.creator("Branko SDK " + Instant.now())
                 .excludeUttWithoutEntities(false)
                 .autoTag(false)
-                .files(Lists.newArrayList(searchDocument.getUuid()))
+                .files(files)
                 .addRule(rule)
                 .create();
 
