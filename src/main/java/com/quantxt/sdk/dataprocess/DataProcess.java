@@ -122,6 +122,7 @@ public class DataProcess extends Resource {
     private boolean excludeUttWithoutEntities;
     private List<SearchRule> searchDictionaries;
     private List<String> files;
+    private List<Insight> insights;
 
     @JsonCreator
     private DataProcess(@JsonProperty("index") final String index,
@@ -131,7 +132,8 @@ public class DataProcess extends Resource {
                         @JsonProperty("minTokenPerUtt") final Integer minTokenPerUtt,
                         @JsonProperty("excludeUttWithoutEntities") final boolean excludeUttWithoutEntities,
                         @JsonProperty("searchDictionaries") final List<SearchRule> searchDictionaries,
-                        @JsonProperty("files") final List<String> files) {
+                        @JsonProperty("files") final List<String> files,
+                        @JsonProperty("insights") final List<Insight> insights) {
         this.index = index;
         this.title = title;
         this.autoTag = autoTag;
@@ -140,6 +142,7 @@ public class DataProcess extends Resource {
         this.excludeUttWithoutEntities = excludeUttWithoutEntities;
         this.searchDictionaries = searchDictionaries;
         this.files = files;
+        this.insights = insights;
     }
 
     /**
@@ -214,6 +217,15 @@ public class DataProcess extends Resource {
         return files;
     }
 
+    /**
+     * Returns insights.
+     *
+     * @return insights.
+     */
+    public List<Insight> getInsights() {
+        return insights;
+    }
+
     @Override
     public String toString() {
         return "DataProcess{" +
@@ -225,6 +237,7 @@ public class DataProcess extends Resource {
                 ", excludeUttWithoutEntities=" + excludeUttWithoutEntities +
                 ", searchDictionaries=" + searchDictionaries +
                 ", files=" + files +
+                ", insights=" + insights +
                 '}';
     }
 }
