@@ -32,6 +32,7 @@ public class Dictionary extends Resource {
     /**
      * Create a DictionaryUpdater to execute update.
      *
+     * @param id Id of the dictionary to be updated
      * @return DictionaryUpdater capable of executing the update
      */
     public static DictionaryUpdater updater(String id) {
