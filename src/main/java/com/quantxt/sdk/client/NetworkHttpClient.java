@@ -1,6 +1,5 @@
 package com.quantxt.sdk.client;
 
-import com.google.common.collect.Lists;
 import com.quantxt.sdk.exception.QTApiException;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -17,10 +16,10 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicHeader;
-import org.apache.tika.Tika;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +29,6 @@ public class NetworkHttpClient extends HttpClient {
     private static final int CONNECTION_TIMEOUT = 100000;
     private static final int SOCKET_TIMEOUT = 305000;
     private final static String API_KEY_HEADER = "X-Api-Key";
-    private final Tika tika = new Tika();
 
     private final org.apache.http.client.HttpClient client;
 
@@ -43,10 +41,9 @@ public class NetworkHttpClient extends HttpClient {
                 .setSocketTimeout(SOCKET_TIMEOUT)
                 .build();
 
-        Collection<Header> headers = Lists.<Header>newArrayList(
-                new BasicHeader(HttpHeaders.ACCEPT, "application/json"),
-                new BasicHeader(HttpHeaders.ACCEPT_ENCODING, "utf-8")
-        );
+        Collection<Header> headers = new ArrayList<>();
+        headers.add(new BasicHeader(HttpHeaders.ACCEPT, "application/json"));
+        headers.add(new BasicHeader(HttpHeaders.ACCEPT_ENCODING, "utf-8"));
 
         org.apache.http.impl.client.HttpClientBuilder clientBuilder = HttpClientBuilder.create();
 
@@ -94,6 +91,7 @@ public class NetworkHttpClient extends HttpClient {
                     }
                     break;
                 case POST:
+                case PUT:
                     builder.addHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType());
                     builder.setEntity(new StringEntity(request.getBody()));
                     break;
