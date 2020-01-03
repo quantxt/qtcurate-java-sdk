@@ -122,7 +122,7 @@ public class DataProcess extends Resource {
     private boolean excludeUttWithoutEntities;
     private List<SearchRule> searchDictionaries;
     private List<String> files;
-    private List<Insight> insights;
+    private Insights insights;
 
     @JsonCreator
     private DataProcess(@JsonProperty("index") final String index,
@@ -133,7 +133,7 @@ public class DataProcess extends Resource {
                         @JsonProperty("excludeUttWithoutEntities") final boolean excludeUttWithoutEntities,
                         @JsonProperty("searchDictionaries") final List<SearchRule> searchDictionaries,
                         @JsonProperty("files") final List<String> files,
-                        @JsonProperty("insights") final List<Insight> insights) {
+                        @JsonProperty("insights") final Insights insights) {
         this.index = index;
         this.title = title;
         this.autoTag = autoTag;
@@ -222,7 +222,7 @@ public class DataProcess extends Resource {
      *
      * @return insights.
      */
-    public List<Insight> getInsights() {
+    public Insights getInsights() {
         return insights;
     }
 

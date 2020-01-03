@@ -2,35 +2,37 @@ package com.quantxt.sdk.dataprocess;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class Insight implements Serializable {
+public class Insights implements Serializable {
 
     private static final long serialVersionUID = -6238012691404059856L;
 
-    private final Integer numberDocumentsIn;
-    private final Integer numberDocumentsOut;
-    private final Integer numberOfResults;
-    private final Integer numberBytesIn;
-    private final Integer took;
-    private final Long startTime;
-    private final Long qtcurateStart;
-    private final Long qtcurateProcessStart;
-    private final Long qtcurateEnd;
+    private Integer numberDocumentsIn;
+    private Integer numberDocumentsOut;
+    private Integer numberOfResults;
+    private Integer numberBytesIn;
+    private Integer took;
+    private Long startTime;
+    private Long qtcurateStart;
+    private Long qtcurateProcessStart;
+    private Long qtcurateEnd;
 
     @JsonCreator
-    public Insight(@JsonProperty("number_documents_in") final Integer numberDocumentsIn,
-                   @JsonProperty("number_documents_out") final Integer numberDocumentsOut,
-                   @JsonProperty("number_of_results") final Integer numberOfResults,
-                   @JsonProperty("number_bytes_in") final Integer numberBytesIn,
-                   @JsonProperty("took") final Integer took,
-                   @JsonProperty("start_time") final Long startTime,
-                   @JsonProperty("qtcurate_start") final Long qtcurateStart,
-                   @JsonProperty("qtcurate_process_start") final Long qtcurateProcessStart,
-                   @JsonProperty("qtcurate_end") final Long qtcurateEnd) {
+    public Insights(@JsonProperty("number_documents_in") final Integer numberDocumentsIn,
+                    @JsonProperty("number_documents_out") final Integer numberDocumentsOut,
+                    @JsonProperty("number_of_results") final Integer numberOfResults,
+                    @JsonProperty("number_bytes_in") final Integer numberBytesIn,
+                    @JsonProperty("took") final Integer took,
+                    @JsonProperty("start_time") final Long startTime,
+                    @JsonProperty("qtcurate_start") final Long qtcurateStart,
+                    @JsonProperty("qtcurate_process_start") final Long qtcurateProcessStart,
+                    @JsonProperty("qtcurate_end") final Long qtcurateEnd) {
         this.numberDocumentsIn = numberDocumentsIn;
         this.numberDocumentsOut = numberDocumentsOut;
         this.numberOfResults = numberOfResults;
@@ -125,7 +127,7 @@ public class Insight implements Serializable {
 
     @Override
     public String toString() {
-        return "Insight{" +
+        return "Insights{" +
                 "numberDocumentsIn=" + numberDocumentsIn +
                 ", numberDocumentsOut=" + numberDocumentsOut +
                 ", numberOfResults=" + numberOfResults +
