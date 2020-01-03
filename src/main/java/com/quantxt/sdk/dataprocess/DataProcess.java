@@ -23,7 +23,7 @@ public class DataProcess extends Resource {
 
     /**
      * Create a DataProcessCreator to execute create.
-     *
+     * @param title The name for the data mining job
      * @return DataProcessCreator capable of executing the create
      */
     public static DataProcessCreator creator(String title) {

@@ -1,6 +1,5 @@
 package com.quantxt.sdk.sample;
 
-import com.google.common.collect.Lists;
 import com.quantxt.sdk.client.QT;
 import com.quantxt.sdk.dataprocess.DataProcess;
 import com.quantxt.sdk.dataprocess.DataProcessCreator;
@@ -9,7 +8,6 @@ import com.quantxt.sdk.dictionary.Dictionary;
 import com.quantxt.sdk.file.SearchDocument;
 import com.quantxt.sdk.progress.Progress;
 import com.quantxt.sdk.search.Search;
-import com.quantxt.sdk.search.SearchExporter;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -17,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,11 +54,13 @@ public class SearchWithDocumentSample {
                 .create();
 
         SearchRule rule = new SearchRule(dictionary, DataProcessCreator.DictionaryType.NUMBER);
+        List<String> files = new ArrayList<>();
+        files.add(searchDocument.getUuid());
 
         DataProcess dataProcess = DataProcess.creator("Branko SDK " + Instant.now())
                 .excludeUttWithoutEntities(false)
                 .autoTag(false)
-                .files(Lists.newArrayList(searchDocument.getUuid()))
+                .files(files)
                 .addRule(rule)
                 .create();
 
@@ -80,13 +81,19 @@ public class SearchWithDocumentSample {
         // Sleep so that data gets to the ES.
         Thread.sleep(5000);
 
-        byte[] exportData = Search.exporter(dataProcess.getIndex())
-                .format(SearchExporter.Format.XLSX)
+        byte[] xlsxExportData = Search.xlsxExporter(dataProcess.getIndex())
                 .export();
         File xlsxExport = new File(dataProcess.getIndex() + ".xlsx");
         OutputStream outStream = new FileOutputStream(xlsxExport);
-        outStream.write(exportData);
-        System.out.println(String.format("Exported %s bytes of data", exportData.length));
+        outStream.write(xlsxExportData);
+        System.out.println(String.format("Exported %s bytes of XLSX data", xlsxExportData.length));
+
+        byte[] jsonExportData = Search.jsonExporter(dataProcess.getIndex())
+                .export();
+        File jsonExport = new File(dataProcess.getIndex() + ".json");
+        outStream = new FileOutputStream(jsonExport);
+        outStream.write(jsonExportData);
+        System.out.println(String.format("Exported %s bytes of JSON data", jsonExportData.length));
 
         boolean deleted = DataProcess.deleter(dataProcess.getIndex()).delete();
         System.out.println(String.format("Data process %s deleted %s", dataProcess.getIndex(), deleted));
