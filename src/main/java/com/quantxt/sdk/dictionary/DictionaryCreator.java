@@ -1,6 +1,8 @@
 package com.quantxt.sdk.dictionary;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.quantxt.sdk.client.HttpMethod;
 import com.quantxt.sdk.client.QTRestClient;
@@ -11,16 +13,23 @@ import com.quantxt.sdk.exception.QTApiException;
 import com.quantxt.sdk.exception.QTRestException;
 import com.quantxt.sdk.resource.Creator;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+@JsonInclude(Include.NON_NULL)
 public class DictionaryCreator extends Creator<Dictionary> {
 
     private String name;
     private List<Dictionary.Entry> entries = new ArrayList<>();
+    private InputStream inputStream;
+    private String fileName;
 
     /**
      * The name of the dictionary.
@@ -59,6 +68,36 @@ public class DictionaryCreator extends Creator<Dictionary> {
     }
 
     /**
+     * The inputStream of the dictionary source.
+     *
+     * @param inputStream Dictionary inputStream.
+     * @param sourceName  Dictionary source name.
+     * @return this
+     */
+    public DictionaryCreator source(InputStream inputStream, String sourceName) {
+        this.inputStream = inputStream;
+        this.fileName = sourceName;
+        return this;
+    }
+
+    /**
+     * Specifies a file as a dictionary input.
+     *
+     * @param file Dictionary file.
+     * @return this
+     */
+    public DictionaryCreator source(File file) {
+        try {
+            this.inputStream = new FileInputStream(file);
+            this.fileName = file.getName();
+
+            return this;
+        } catch (FileNotFoundException e) {
+            throw new QTApiException("Error processing specified dictionary source.", e);
+        }
+    }
+
+    /**
      * Make the request to the API to perform the create.
      *
      * @param client QTClient with which to make the request
@@ -66,7 +105,7 @@ public class DictionaryCreator extends Creator<Dictionary> {
      */
     @Override
     public Dictionary create(QTRestClient client) {
-        Request request = new Request(HttpMethod.POST, "/dictionaries");
+        Request request = createRequest();
         addPayload(request, client);
 
         Response response = client.request(request);
@@ -91,15 +130,34 @@ public class DictionaryCreator extends Creator<Dictionary> {
     }
 
     /**
+     * Create {@link Request} object depending on parameters contained.
+     *
+     * @return Request object
+     */
+    private Request createRequest() {
+        if (this.inputStream == null) {
+            return new Request(HttpMethod.POST, "/dictionaries");
+        } else {
+            return new Request(HttpMethod.UPLOAD, "/dictionaries/upload");
+        }
+    }
+
+    /**
      * Add the requested JSON body to the Request.
      *
      * @param request Request to add post params to
      */
     private void addPayload(final Request request, final QTRestClient client) {
-        try {
-            request.setBody(client.getObjectMapper().writeValueAsString(this));
-        } catch (JsonProcessingException e) {
-            throw new QTApiException(e.getMessage(), e);
+        if (this.inputStream == null) {
+            try {
+                request.setBody(client.getObjectMapper().writeValueAsString(this));
+            } catch (JsonProcessingException e) {
+                throw new QTApiException(e.getMessage(), e);
+            }
+        } else {
+            request.setInputStream(this.inputStream);
+            request.setFileName(this.fileName);
+            request.addPostParam("name", name);
         }
     }
 }

@@ -22,6 +22,7 @@ public class Request {
 
     private String body;
     private InputStream inputStream;
+    private String fileName;
     private final Map<String, List<String>> postParams;
 
     /**
@@ -71,6 +72,14 @@ public class Request {
 
     public void setInputStream(InputStream inputStream) {
         this.inputStream = inputStream;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public Map<String, List<String>> getPostParams() {
