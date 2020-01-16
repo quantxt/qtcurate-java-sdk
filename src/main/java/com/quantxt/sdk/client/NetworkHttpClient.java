@@ -13,6 +13,7 @@ import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.InputStreamBody;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicHeader;
@@ -78,10 +79,9 @@ public class NetworkHttpClient extends HttpClient {
         try {
             switch (method) {
                 case UPLOAD:
-                    builder.addHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_OCTET_STREAM.getMimeType());
-
                     MultipartEntityBuilder mBuilder = MultipartEntityBuilder.create();
-                    mBuilder.addBinaryBody("file", request.getInputStream());
+                    mBuilder.addPart("file", new InputStreamBody(request.getInputStream(), request.getFileName()));
+
                     builder.setEntity(mBuilder.build());
 
                     for (Map.Entry<String, List<String>> entry : request.getPostParams().entrySet()) {

@@ -12,7 +12,6 @@ import com.quantxt.sdk.search.Search;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -30,15 +29,14 @@ public class SearchWithDocumentSample {
     public static void main(String[] args) throws InterruptedException, IOException {
         QT.init(API_KEY);
 
-        InputStream inputStream = SearchWithDocumentSample.class
-                .getClassLoader().getResourceAsStream(FILE_NAME);
+        File file = new File(SearchWithDocumentSample.class
+                .getClassLoader().getResource(FILE_NAME).getFile());
 
         List<DataProcess> existingSearches = DataProcess.reader().read();
         System.out.println(String.format("Existing searches %s: %s", existingSearches.size(), existingSearches));
 
         SearchDocument searchDocument = SearchDocument.creator()
-                .name(FILE_NAME)
-                .inputStream(inputStream)
+                .source(file)
                 .create();
 
         System.out.println("Uploaded search document: " + searchDocument);
