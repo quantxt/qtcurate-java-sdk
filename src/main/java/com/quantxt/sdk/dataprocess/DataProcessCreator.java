@@ -48,6 +48,7 @@ public class DataProcessCreator extends Creator<DataProcess> {
     private String cmd;
     private List<SearchRule> searchDictionaries = new ArrayList<>();
     private List<String> files = new ArrayList<>();
+    private List<String> urls = new ArrayList<>();
 
     public DataProcessCreator(String title) {
         this.title = title;
@@ -92,6 +93,11 @@ public class DataProcessCreator extends Creator<DataProcess> {
 
     public DataProcessCreator files(List<String> files) {
         this.files = files;
+        return this;
+    }
+
+    public DataProcessCreator urls(List<String> urls) {
+        this.urls = urls;
         return this;
     }
 
