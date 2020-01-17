@@ -16,20 +16,17 @@ import static com.quantxt.sdk.sample.MonitorJobs.wiat4Job2Finish;
 
 public class FullTextSearchOnDocuments {
     private static final String API_KEY = "123456";
-    private static final String FILE_NAME_1 = "file1.pdf";
-    private static final String FILE_NAME_2 = "file2.pdf";
+    private static final String FILE_NAME_1 = "search-file.pdf";
+    private static final String FILE_NAME_2 = "search-file.pdf";
 
     public static List<String> getDocumentUuids() throws FileNotFoundException {
-        InputStream inputStream_1 = new FileInputStream(new File(FILE_NAME_1));
-        InputStream inputStream_2 = new FileInputStream(new File(FILE_NAME_2));
+        InputStream inputStream = new FileInputStream(new File(FILE_NAME_2));
 
         SearchDocument searchDocument_1 = SearchDocument.creator()
-                .name(FILE_NAME_1)
-                .inputStream(inputStream_1)
+                .source(new File(FILE_NAME_1))
                 .create();
         SearchDocument searchDocument_2 = SearchDocument.creator()
-                .name(FILE_NAME_2)
-                .inputStream(inputStream_2)
+                .source(inputStream, FILE_NAME_2)
                 .create();
 
         System.out.println("Content is streamed");
