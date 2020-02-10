@@ -25,7 +25,8 @@ public class DataProcessCreator extends Creator<DataProcess> {
         NUMBER("DOUBLE"),
         STRING("STRING"),
         DATETIME("DATETIME"),
-        NONE("NONE");
+        NONE("NONE"),
+        REGEX("KEYWORD");
 
         private final String type;
 
