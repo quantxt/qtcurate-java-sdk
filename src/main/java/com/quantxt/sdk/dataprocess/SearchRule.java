@@ -17,6 +17,8 @@ public class SearchRule implements Serializable {
 
     public enum AnalyzeMode {EXACT, EXACT_CI, WHITESPACE, SIMPLE, STANDARD, STEM};
 
+    public enum ChunkMode {NONE, SENTENCE, PARAGRAPH, PAGE};
+
     private static final long serialVersionUID = -6238012691404059856L;
 
     private String vocabPath;

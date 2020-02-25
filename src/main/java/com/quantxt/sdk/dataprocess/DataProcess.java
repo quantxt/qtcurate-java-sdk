@@ -116,20 +116,28 @@ public class DataProcess extends Resource {
 
     private String index;
     private String title;
-    private Boolean autoTag;
+
     private Integer maxTokenPerUtt;
     private Integer minTokenPerUtt;
+
+    private boolean autoTag;
+    private boolean sortByPosition;
     private boolean excludeUttWithoutEntities;
+
+    private SearchRule.ChunkMode chunk;
     private List<SearchRule> searchDictionaries;
     private List<String> files;
+
     private Insights insights;
 
     @JsonCreator
     private DataProcess(@JsonProperty("index") final String index,
                         @JsonProperty("title") final String title,
+                        @JsonProperty("chunk") final String chunk,
                         @JsonProperty("get_phrases") final Boolean autoTag,
                         @JsonProperty("maxTokenPerUtt") final Integer maxTokenPerUtt,
                         @JsonProperty("minTokenPerUtt") final Integer minTokenPerUtt,
+                        @JsonProperty("sortByPosition") final boolean sortByPosition,
                         @JsonProperty("excludeUttWithoutEntities") final boolean excludeUttWithoutEntities,
                         @JsonProperty("searchDictionaries") final List<SearchRule> searchDictionaries,
                         @JsonProperty("files") final List<String> files,
@@ -140,9 +148,11 @@ public class DataProcess extends Resource {
         this.maxTokenPerUtt = maxTokenPerUtt;
         this.minTokenPerUtt = minTokenPerUtt;
         this.excludeUttWithoutEntities = excludeUttWithoutEntities;
+        this.sortByPosition = sortByPosition;
         this.searchDictionaries = searchDictionaries;
         this.files = files;
         this.insights = insights;
+        this.chunk = chunk == null || chunk.isEmpty() ? SearchRule.ChunkMode.SENTENCE : SearchRule.ChunkMode.valueOf(chunk);
     }
 
     /**
@@ -232,6 +242,7 @@ public class DataProcess extends Resource {
                 "index='" + index + '\'' +
                 ", title='" + title + '\'' +
                 ", autoTag=" + autoTag +
+                ", chunk=" + chunk +
                 ", maxTokenPerUtt=" + maxTokenPerUtt +
                 ", minTokenPerUtt=" + minTokenPerUtt +
                 ", excludeUttWithoutEntities=" + excludeUttWithoutEntities +
