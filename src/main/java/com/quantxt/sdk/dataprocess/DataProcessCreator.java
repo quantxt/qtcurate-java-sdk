@@ -44,9 +44,15 @@ public class DataProcessCreator extends Creator<DataProcess> {
     private Integer maxTokenPerUtt = 500;
     private Integer minTokenPerUtt = 6;
     private boolean excludeUttWithoutEntities = true;
+
+    @JsonProperty("_sortByPosition")
+    private boolean sortByPosition = false;
+
     private String title;
     @JsonProperty("stitle")
     private String cmd;
+
+    private SearchRule.ChunkMode chunk;
     private List<SearchRule> searchDictionaries = new ArrayList<>();
     private List<String> files = new ArrayList<>();
     private List<String> urls = new ArrayList<>();
@@ -89,6 +95,16 @@ public class DataProcessCreator extends Creator<DataProcess> {
 
     public DataProcessCreator cmd(String cmd) {
         this.cmd = cmd;
+        return this;
+    }
+
+    public DataProcessCreator chunk(String chunk) {
+        this.chunk = SearchRule.ChunkMode.valueOf(chunk);
+        return this;
+    }
+
+    public DataProcessCreator sortByPosition(boolean sortByPosition) {
+        this.sortByPosition = sortByPosition;
         return this;
     }
 
