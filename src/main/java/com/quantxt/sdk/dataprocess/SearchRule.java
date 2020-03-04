@@ -27,7 +27,7 @@ public class SearchRule implements Serializable {
     private String [] phraseMatchingGroups;
 
     private SearchMode searchMode;
-    private AnalyzeMode analyzeMode;
+    private AnalyzeMode analyzeStrategy;
 
     private String skipPatternBetweenKeyAndValue;
     private String skipPatternBetweenValues;
@@ -58,7 +58,7 @@ public class SearchRule implements Serializable {
             this.searchMode = SearchMode.valueOf(searchMode);
         }
         if (analyzeMode != null) {
-            this.analyzeMode = AnalyzeMode.valueOf(analyzeMode);
+            this.analyzeStrategy = AnalyzeMode.valueOf(analyzeMode);
         }
 
         this.stopwordList = stopwordList;
@@ -101,7 +101,7 @@ public class SearchRule implements Serializable {
     }
 
     public SearchRule setAnlyzeMode(String analyzeMode){
-        this.analyzeMode = AnalyzeMode.valueOf(analyzeMode);
+        this.analyzeStrategy = AnalyzeMode.valueOf(analyzeMode);
         return this;
     }
 
