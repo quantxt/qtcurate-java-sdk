@@ -31,6 +31,15 @@ public class DataProcess extends Resource {
     }
 
     /**
+     * Create a DataProcessUpdater to execute update.
+     * @param id The name of the search to be updated
+     * @return DataProcessUpdater capable of executing the update
+     */
+    public static DataProcessUpdater updater(String id) {
+        return new DataProcessUpdater(id);
+    }
+
+    /**
      * Create a DataProcessReader to execute read.
      *
      * @return DataProcessReader capable of executing the read

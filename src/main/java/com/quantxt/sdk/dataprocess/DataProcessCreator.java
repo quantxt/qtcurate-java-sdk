@@ -43,10 +43,15 @@ public class DataProcessCreator extends Creator<DataProcess> {
     private Boolean autoTag;
     private Integer maxTokenPerUtt = 500;
     private Integer minTokenPerUtt = 6;
+    private Integer numWorkers = 8;
     private boolean excludeUttWithoutEntities = true;
+
+    private String query;
 
     @JsonProperty("_sortByPosition")
     private boolean sortByPosition = false;
+
+    private List<String> sources;
 
     private String title;
     @JsonProperty("stitle")
@@ -88,6 +93,11 @@ public class DataProcessCreator extends Creator<DataProcess> {
         return this;
     }
 
+    public DataProcessCreator numWorkers(Integer numWorkers) {
+        this.numWorkers = numWorkers;
+        return this;
+    }
+
     public DataProcessCreator excludeUttWithoutEntities(boolean excludeUttWithoutEntities) {
         this.excludeUttWithoutEntities = excludeUttWithoutEntities;
         return this;
@@ -95,6 +105,16 @@ public class DataProcessCreator extends Creator<DataProcess> {
 
     public DataProcessCreator cmd(String cmd) {
         this.cmd = cmd;
+        return this;
+    }
+
+    public DataProcessCreator sourceIDs(List<String> sources) {
+        this.sources = sources;
+        return this;
+    }
+
+    public DataProcessCreator query(String query) {
+        this.query = query;
         return this;
     }
 

@@ -93,7 +93,9 @@ public class NetworkHttpClient extends HttpClient {
                 case POST:
                 case PUT:
                     builder.addHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.getMimeType());
-                    builder.setEntity(new StringEntity(request.getBody()));
+                    if (request.getBody() != null) {
+                        builder.setEntity(new StringEntity(request.getBody()));
+                    }
                     break;
                 default:
                     break;

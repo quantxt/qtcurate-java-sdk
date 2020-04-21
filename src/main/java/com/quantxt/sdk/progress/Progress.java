@@ -74,15 +74,15 @@ public class Progress extends Resource {
         }
     }
 
-    private String index;
+    private String id;
     private Integer progress;
     private String message;
 
     @JsonCreator
-    private Progress(@JsonProperty("index") final String index,
+    private Progress(@JsonProperty("id") final String id,
                      @JsonProperty("progress") final Integer progress,
                      @JsonProperty("message") final String message) {
-        this.index = index;
+        this.id = id;
         this.progress = progress;
         this.message = message;
     }
@@ -92,8 +92,8 @@ public class Progress extends Resource {
      *
      * @return index.
      */
-    public String getIndex() {
-        return index;
+    public String getId() {
+        return id;
     }
 
     /**
@@ -117,7 +117,7 @@ public class Progress extends Resource {
     @Override
     public String toString() {
         return "Progress{" +
-                "index='" + index + '\'' +
+                "id='" + id + '\'' +
                 ", progress=" + progress +
                 ", message='" + message + '\'' +
                 '}';
