@@ -18,8 +18,8 @@ public class MonitorJobs {
 
         if (!progressList.isEmpty()) {
             for (Progress p : progressList) {
-                String index = p.getIndex();
-                System.out.println("Job " + index + " " + p.getProgress() +"% completed.");
+                String id = p.getId();
+                System.out.println("Job " + id + " " + p.getProgress() +"% completed.");
             }
         }
     }

@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class Request {
 
-    private final String API_URL = "http://search.api.quantxt.com";
+    private final String API_URL = "http://api.quantxt.com";
 
     private final HttpMethod method;
     private final String url;
