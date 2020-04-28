@@ -10,9 +10,10 @@ import com.quantxt.sdk.exception.QTApiConnectionException;
 import com.quantxt.sdk.exception.QTApiException;
 import com.quantxt.sdk.exception.QTRestException;
 import com.quantxt.sdk.resource.Exporter;
-import org.apache.commons.io.IOUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class JsonSearchExporter extends Exporter<Search> {
@@ -47,10 +48,21 @@ public class JsonSearchExporter extends Exporter<Search> {
         }
 
         try {
-            return IOUtils.toByteArray(response.getStream());
+            return toByteArray(response.getStream());
         } catch (IOException e) {
             throw new QTApiException("JSON search export failed. Unable to read the data.", e);
         }
+    }
+
+    //TODO: this method is also used in XlsSearchExporter, reuse it
+    private byte[] toByteArray(InputStream is) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        int reads = is.read();
+        while(reads != -1){
+            baos.write(reads);
+            reads = is.read();
+        }
+        return baos.toByteArray();
     }
 
 }

@@ -6,7 +6,7 @@
 
     <groupId>com.quantxt.sdk</groupId>
     <artifactId>qtcurate</artifactId>
-    <version>1.4.0</version>
+    <version>1.4.1</version>
     <packaging>jar</packaging>
 
     <name>Theia SDK Search and Data Extraction</name>
@@ -65,9 +65,8 @@
     <properties>
         <httpclient.version>4.5.10</httpclient.version>
         <httpmime.version>4.5.10</httpmime.version>
-        <commons-io.version>2.6</commons-io.version>
         <jackson.version>2.10.1</jackson.version>
-        <slf4j.version>1.7.29</slf4j.version>
+        <slf4j.version>1.7.3</slf4j.version>
     </properties>
 
     <dependencies>
@@ -80,11 +79,6 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpmime</artifactId>
             <version>${httpmime.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${commons-io.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

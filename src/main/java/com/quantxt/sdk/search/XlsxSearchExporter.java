@@ -12,9 +12,10 @@ import com.quantxt.sdk.exception.QTApiConnectionException;
 import com.quantxt.sdk.exception.QTApiException;
 import com.quantxt.sdk.exception.QTRestException;
 import com.quantxt.sdk.resource.Exporter;
-import org.apache.commons.io.IOUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -189,7 +190,7 @@ public class XlsxSearchExporter extends Exporter<Search> {
         }
 
         try {
-            return IOUtils.toByteArray(response.getStream());
+            return toByteArray(response.getStream());
         } catch (IOException e) {
             throw new QTApiException("Xlsx search export failed. Unable to read the data.", e);
         }
@@ -206,5 +207,15 @@ public class XlsxSearchExporter extends Exporter<Search> {
         } catch (JsonProcessingException e) {
             throw new QTApiException(e.getMessage(), e);
         }
+    }
+
+    private byte[] toByteArray(InputStream is) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        int reads = is.read();
+        while(reads != -1){
+            baos.write(reads);
+            reads = is.read();
+        }
+        return baos.toByteArray();
     }
 }
