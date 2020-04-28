@@ -7,6 +7,7 @@ import com.quantxt.sdk.exception.AuthenticationException;
  */
 public class QT {
     private static String apiKey;
+    private static String enviroment = "";
     private static QTRestClient restClient;
 
     private QT() {}
@@ -17,6 +18,22 @@ public class QT {
      * @param apiKey API key to use
      */
     public static void init(final String apiKey) {
+        QT.setApiKey(apiKey);
+    }
+
+    /**
+     * Initialize the QT environment.
+     *
+     * @param apiKey API key to use
+     * @param apiKey server enviroment to use
+     */
+    public static void init(final String apiKey, final String env) {
+        if (env == null || !(env.equals("test") || env.equals("staging")) ){
+            enviroment = "";
+        } else {
+            // so passing `test` will result in `test.api.quantxt.com`
+            enviroment = env + ".";
+        }
         QT.setApiKey(apiKey);
     }
 
@@ -64,5 +81,9 @@ public class QT {
         }
 
         return QT.restClient;
+    }
+
+    public static String getEnviroment() {
+        return enviroment;
     }
 }
