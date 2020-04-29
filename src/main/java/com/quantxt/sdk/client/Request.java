@@ -13,37 +13,32 @@ import java.util.List;
 import java.util.Map;
 
 public class Request {
-
-    private final String API_URL = "http://api.quantxt.com";
+    private final String API_URL = "api.quantxt.com";
+    private final String protocol = "http://";
 
     private final HttpMethod method;
-    private final String url;
+    private final String route;
     private String apiKey;
 
     private String body;
     private InputStream inputStream;
     private String fileName;
     private final Map<String, List<String>> postParams;
-
     /**
      * Create a new API request.
      *
      * @param method HTTP Method
-     * @param uri    uri of request
+     * @param route  api endpoint
      */
     public Request(final HttpMethod method,
-                   final String uri) {
+                   final String route) {
         this.method = method;
-        this.url = API_URL + uri;
+        this.route  = route;
         this.postParams = new HashMap<>();
     }
 
     public HttpMethod getMethod() {
         return method;
-    }
-
-    public String getUrl() {
-        return url;
     }
 
     public String getApiKey() {
@@ -110,7 +105,8 @@ public class Request {
      * @return URL for the request
      */
     public URL constructURL() {
-        String stringUri = url;
+        String env = QT.getEnviroment();
+        String stringUri = protocol + env + API_URL + route;
 
         try {
             URI uri = new URI(stringUri);
