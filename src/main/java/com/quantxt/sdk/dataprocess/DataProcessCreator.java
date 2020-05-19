@@ -40,7 +40,7 @@ public class DataProcessCreator extends Creator<DataProcess> {
     }
 
     @JsonProperty("get_phrases")
-    private Boolean autoTag;
+    private Boolean autoTag = false;
     private Integer maxTokenPerUtt = 500;
     private Integer minTokenPerUtt = 6;
     private Integer numWorkers = 8;
