@@ -106,58 +106,19 @@ public class Dictionary extends Resource {
     private String key;
     private String name;
     private Boolean global;
-    private List<Entry> entries;
+    private List<DictionaryEntry> entries;
 
     @JsonCreator
     private Dictionary(@JsonProperty("id") final String id,
                        @JsonProperty("key") final String key,
                        @JsonProperty("name") final String name,
                        @JsonProperty("global") final Boolean global,
-                       @JsonProperty("entries") final List<Entry> entries) {
+                       @JsonProperty("entries") final List<DictionaryEntry> entries) {
         this.id = id;
         this.key = key;
         this.name = name;
         this.global = global;
         this.entries = entries;
-    }
-
-    public static class Entry {
-
-        private String key;
-        private String value;
-
-        @JsonCreator
-        public Entry(@JsonProperty("key") final String key,
-              @JsonProperty("value") final String value) {
-            this.key = key;
-            this.value = value;
-        }
-
-        /**
-         * Returns dictionary entry key.
-         *
-         * @return Entry key.
-         */
-        public String getKey() {
-            return key;
-        }
-
-        /**
-         * Returns dictionary entry value.
-         *
-         * @return Entry value.
-         */
-        public String getValue() {
-            return value;
-        }
-
-        @Override
-        public String toString() {
-            return "Entry{" +
-                    "key='" + key + '\'' +
-                    ", value='" + value + '\'' +
-                    '}';
-        }
     }
 
     /**
@@ -201,7 +162,7 @@ public class Dictionary extends Resource {
      *
      * @return Dictionary entries.
      */
-    public List<Entry> getEntries() {
+    public List<DictionaryEntry> getEntries() {
         return entries;
     }
 

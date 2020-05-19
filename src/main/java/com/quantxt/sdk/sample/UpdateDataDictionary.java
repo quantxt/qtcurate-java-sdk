@@ -2,9 +2,12 @@ package com.quantxt.sdk.sample;
 
 import com.quantxt.sdk.client.QT;
 import com.quantxt.sdk.dictionary.Dictionary;
+import com.quantxt.sdk.dictionary.DictionaryEntry;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class UpdateDataDictionary {
@@ -24,9 +27,10 @@ public class UpdateDataDictionary {
                 .create();
 
         // 1- Create list of words and their meanings
-        Map<String, String> entries = new HashMap<>();
-        entries.put("Apple Inc.", "AAPL");
-        entries.put("Amazon.com", "AMZN");
+        List<DictionaryEntry> entries = new ArrayList<>();
+        //Search for `Apple Inc.` and map categorize/map it as/to AAPL
+        entries.add(new DictionaryEntry("AAPL", "Apple Inc."));
+        entries.add(new DictionaryEntry("AMZN", "Amazon.com"));
 
         // 2- Initialize the dictionary
         Dictionary dictionary1 = Dictionary.creator()
@@ -41,8 +45,8 @@ public class UpdateDataDictionary {
         Dictionary.updater(dictionary.getId())
                 .name("Stock Mapping Dictionary")
                 .entries(dictionary.getEntries())
-                .addEntry("Alphabet Inc.", "GOOG")
-                .addEntry(new Dictionary.Entry("Amazon.com", "AWS"));
+                .addEntry("GOOG", "Alphabet Inc.")
+                .addEntry(new DictionaryEntry("AWS", "Amazon.com"));
 
         System.out.println("Stock mapping dictionary updated: " + dictionary);
     }
