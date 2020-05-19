@@ -5,6 +5,7 @@ import com.quantxt.sdk.dataprocess.DataProcess;
 import com.quantxt.sdk.dataprocess.DataProcessCreator;
 import com.quantxt.sdk.dataprocess.SearchRule;
 import com.quantxt.sdk.dictionary.Dictionary;
+import com.quantxt.sdk.dictionary.DictionaryEntry;
 import com.quantxt.sdk.file.SearchDocument;
 import com.quantxt.sdk.progress.Progress;
 import com.quantxt.sdk.search.Search;
@@ -15,9 +16,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static java.lang.Thread.sleep;
 
@@ -41,10 +40,10 @@ public class SearchWithDocumentSample {
 
         System.out.println("Uploaded search document: " + searchDocument);
 
-        Map<String, String> entries = new HashMap<>();
-        entries.put("key1", "val1");
-        entries.put("key2", "val2");
-        entries.put("key3", "val3");
+        List<DictionaryEntry> entries = new ArrayList<>();
+        entries.add(new DictionaryEntry("category1", "search_str1"));
+        entries.add(new DictionaryEntry("category1", "search_str2"));
+        entries.add(new DictionaryEntry("category2", "search_str3"));
 
         Dictionary dictionary = Dictionary.creator()
                 .name("SDK Dictionary test 2")

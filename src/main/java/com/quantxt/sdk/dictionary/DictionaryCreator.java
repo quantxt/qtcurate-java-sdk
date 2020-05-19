@@ -19,15 +19,13 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 @JsonInclude(Include.NON_NULL)
 public class DictionaryCreator extends Creator<Dictionary> {
 
     private String name;
-    private List<Dictionary.Entry> entries = new ArrayList<>();
+    private List<DictionaryEntry> entries = new ArrayList<>();
     private InputStream inputStream;
     private String fileName;
 
@@ -48,22 +46,32 @@ public class DictionaryCreator extends Creator<Dictionary> {
      * @param entries Dictionary entries.
      * @return this
      */
-    public DictionaryCreator entries(final Map<String, String> entries) {
-        this.entries = entries.entrySet().stream()
-                .map(entry -> new Dictionary.Entry(entry.getKey(), entry.getValue()))
-                .collect(Collectors.toList());
+    public DictionaryCreator entries(final List<DictionaryEntry> entries) {
+        this.entries = entries;
         return this;
     }
 
     /**
-     * Append single entry in the dictionary.
+     * Append single entry in the dictionary. Category is set the same as the search string.
      *
-     * @param key   Dictionary entry key.
-     * @param value Dictionary entry value.
+     * @param search_string   String to be searched in raw content.
      * @return this
      */
-    public DictionaryCreator addEntry(String key, String value) {
-        this.entries.add(new Dictionary.Entry(key, value));
+
+    public DictionaryCreator addEntry(String search_string) {
+        this.entries.add(new DictionaryEntry(search_string, search_string));
+        return this;
+    }
+
+    /**
+     * Append single search string with category in the dictionary.
+     *
+     * @param search_string   String to be searched in raw content.
+     * @param category        Category.
+     * @return this
+     */
+    public DictionaryCreator addEntry(String search_string, String category) {
+        this.entries.add(new DictionaryEntry(category, search_string));
         return this;
     }
 

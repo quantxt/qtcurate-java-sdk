@@ -5,12 +5,12 @@ import com.quantxt.sdk.dataprocess.DataProcess;
 import com.quantxt.sdk.dataprocess.DataProcessCreator;
 import com.quantxt.sdk.dataprocess.SearchRule;
 import com.quantxt.sdk.dictionary.Dictionary;
+import com.quantxt.sdk.dictionary.DictionaryEntry;
 
 import java.io.FileNotFoundException;
 import java.time.Instant;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static com.quantxt.sdk.sample.FullTextSearchOnDocuments.getDocumentUuids;
 import static com.quantxt.sdk.sample.MonitorJobs.wiat4Job2Finish;
@@ -20,11 +20,11 @@ public class MiningContentWithDictionaries {
 
 
     private static Dictionary getDateDictionary(){
-        Map<String, String> entries = new HashMap<>();
-        entries.put("Date of the Report",     "Report Date");
-        entries.put("report was created on",  "Report Date");
-        entries.put("Inspection was done on", "Inspection Date");
-        entries.put("discovery was done on",  "Inspection Date");
+        List<DictionaryEntry> entries = new ArrayList<>();
+        entries.add(new DictionaryEntry( "Report Date", "Date of the Report"));
+        entries.add(new DictionaryEntry("Report Date", "report was created on"));
+        entries.add(new DictionaryEntry("Inspection Date", "Inspection was done on"));
+        entries.add(new DictionaryEntry("Inspection Date", "discovery was done on"));
 
         // 2- Initialize the dictionary
         Dictionary date_dictionary = Dictionary.creator()

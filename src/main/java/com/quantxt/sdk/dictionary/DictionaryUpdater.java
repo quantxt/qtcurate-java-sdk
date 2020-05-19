@@ -14,8 +14,6 @@ import com.quantxt.sdk.resource.Updater;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class DictionaryUpdater extends Updater<Dictionary> {
@@ -23,7 +21,7 @@ public class DictionaryUpdater extends Updater<Dictionary> {
     @JsonIgnore
     private String id;
     private String name;
-    private List<Dictionary.Entry> entries = new ArrayList<>();
+    private List<DictionaryEntry> entries = new ArrayList<>();
 
     /**
      * Construct a new DictionaryUpdater.
@@ -48,36 +46,34 @@ public class DictionaryUpdater extends Updater<Dictionary> {
     /**
      * Add entries in the dictionary.
      *
-     * @param entries Dictionary entries.
+     * @param entries List of Dictionary.Entry entries.
      * @return this
      */
-    public DictionaryUpdater entries(final Map<String, String> entries) {
-        this.entries = entries.entrySet().stream()
-                .map(entry -> new Dictionary.Entry(entry.getKey(), entry.getValue()))
-                .collect(Collectors.toList());
+    public DictionaryUpdater entries(List<DictionaryEntry> entries) {
+        this.entries = entries;
         return this;
     }
 
     /**
-     * Add entries in the dictionary.
+     * Append single entry without category in the dictionary.
      *
-     * @param entries List of Dictionary.Entry entries.
+     * @param search_string   Dictionary entry key.
      * @return this
      */
-    public DictionaryUpdater entries(List<Dictionary.Entry> entries) {
-        this.entries = entries;
+    public DictionaryUpdater addEntry(String search_string) {
+        this.entries.add(new DictionaryEntry(search_string, search_string));
         return this;
     }
 
     /**
      * Append single entry in the dictionary.
      *
-     * @param key   Dictionary entry key.
-     * @param value Dictionary entry value.
+     * @param search_string   Dictionary entry key.
+     * @param category Dictionary entry value.
      * @return this
      */
-    public DictionaryUpdater addEntry(String key, String value) {
-        this.entries.add(new Dictionary.Entry(key, value));
+    public DictionaryUpdater addEntry(String search_string, String category) {
+        this.entries.add(new DictionaryEntry(category, search_string));
         return this;
     }
 
@@ -87,7 +83,7 @@ public class DictionaryUpdater extends Updater<Dictionary> {
      * @param entry Dictionary.Entry entry.
      * @return this
      */
-    public DictionaryUpdater addEntry(Dictionary.Entry entry) {
+    public DictionaryUpdater addEntry(DictionaryEntry entry) {
         this.entries.add(entry);
         return this;
     }
