@@ -103,19 +103,16 @@ public class Dictionary extends Resource {
     }
 
     private String id;
-    private String key;
     private String name;
     private Boolean global;
     private List<DictionaryEntry> entries;
 
     @JsonCreator
     private Dictionary(@JsonProperty("id") final String id,
-                       @JsonProperty("key") final String key,
                        @JsonProperty("name") final String name,
                        @JsonProperty("global") final Boolean global,
                        @JsonProperty("entries") final List<DictionaryEntry> entries) {
         this.id = id;
-        this.key = key;
         this.name = name;
         this.global = global;
         this.entries = entries;
@@ -128,15 +125,6 @@ public class Dictionary extends Resource {
      */
     public String getId() {
         return id;
-    }
-
-    /**
-     * Returns dictionary key.
-     *
-     * @return Dictionary key.
-     */
-    public String getKey() {
-        return key;
     }
 
     /**
@@ -170,7 +158,6 @@ public class Dictionary extends Resource {
     public String toString() {
         return "Dictionary{" +
                 "id='" + id + '\'' +
-                ", key='" + key + '\'' +
                 ", name='" + name + '\'' +
                 ", global=" + global +
                 ", entries=" + entries +

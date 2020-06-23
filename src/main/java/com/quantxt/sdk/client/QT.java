@@ -28,9 +28,7 @@ public class QT {
      * @param apiKey server enviroment to use
      */
     public static void init(final String apiKey, final String env) {
-        if (env == null || !(env.equals("test") || env.equals("staging")) ){
-            enviroment = "";
-        } else {
+        if (env != null ){
             // so passing `test` will result in `test.api.quantxt.com`
             enviroment = env + ".";
         }

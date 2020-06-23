@@ -5,17 +5,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DictionaryEntry {
 
-    @JsonProperty("key")
     private String category;
-
-    @JsonProperty("value")
-    private String search_string;
+    private String str;
 
     @JsonCreator
-    public DictionaryEntry(@JsonProperty("key") final String category,
-                           @JsonProperty("value") final String search_string) {
+    public DictionaryEntry(@JsonProperty("category") final String category,
+                           @JsonProperty("str") final String search_string) {
         this.category = category;
-        this.search_string = search_string;
+        this.str = search_string;
     }
 
     /**
@@ -33,14 +30,14 @@ public class DictionaryEntry {
      * @return Entry search string.
      */
     public String getSearch_string() {
-        return search_string;
+        return str;
     }
 
     @Override
     public String toString() {
         return "Entry{" +
                 "category='" + category + '\'' +
-                ", search_string='" + search_string + '\'' +
+                ", search_string='" + str + '\'' +
                 '}';
     }
 }
