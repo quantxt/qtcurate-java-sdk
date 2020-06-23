@@ -21,7 +21,7 @@ public class SearchRule implements Serializable {
 
     private static final long serialVersionUID = -6238012691404059856L;
 
-    private String vocabPath;
+    private String vocabId;
     private String vocabValueType;
     private String phraseMatchingPattern;
     private String [] phraseMatchingGroups;
@@ -36,7 +36,7 @@ public class SearchRule implements Serializable {
     private String [] synonymList;
 
     @JsonCreator
-    public SearchRule(@JsonProperty("vocabPath") String vocabPath,
+    public SearchRule(@JsonProperty("vocabId") String vocabId,
                       @JsonProperty("vocabValueType") String vocabValueType,
                       @JsonProperty("vocabRegex") String phraseMatchingPattern,
                       @JsonProperty("vocabRegexGroups") String [] phraseMatchingGroupStr,
@@ -47,7 +47,7 @@ public class SearchRule implements Serializable {
                       @JsonProperty("stopwordList") String [] stopwordList,
                       @JsonProperty("synonymList") String [] synonymList)
     {
-        this.vocabPath = vocabPath;
+        this.vocabId = vocabId;
         this.vocabValueType = vocabValueType;
         this.phraseMatchingPattern = phraseMatchingPattern;
         this.phraseMatchingGroups = phraseMatchingGroupStr;
@@ -67,20 +67,24 @@ public class SearchRule implements Serializable {
 
     public SearchRule(Dictionary dictionary) {
         this.validateDictionary(dictionary);
-        this.vocabPath = dictionary.getKey();
+        this.vocabId = dictionary.getId();
     }
 
     public SearchRule(Dictionary dictionary, DataProcessCreator.DictionaryType type) {
         this.validateDictionary(dictionary);
-        this.vocabPath = dictionary.getKey();
-        this.vocabValueType = type.toString();
+        this.vocabId = dictionary.getId();
+        if (type != null) {
+            this.vocabValueType = type.toString();
+        }
     }
 
     public SearchRule(Dictionary dictionary, DataProcessCreator.DictionaryType type,
                       String regex, String [] groups) {
         this.validateDictionary(dictionary);
-        this.vocabPath = dictionary.getKey();
-        this.vocabValueType = type.toString();
+        this.vocabId = dictionary.getId();
+        if (type != null) {
+            this.vocabValueType = type.toString();
+        }
         this.phraseMatchingPattern = regex;
         this.phraseMatchingGroups = groups;
     }
@@ -116,7 +120,7 @@ public class SearchRule implements Serializable {
     }
 
     private void validateDictionary(Dictionary dictionary) {
-        if (dictionary.getKey().isEmpty()) {
+        if (dictionary.getId().isEmpty()) {
             throw new QTApiException("You must provide a valid dictionary");
         }
     }

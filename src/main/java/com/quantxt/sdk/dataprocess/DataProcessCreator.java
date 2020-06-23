@@ -22,11 +22,9 @@ public class DataProcessCreator extends Creator<DataProcess> {
      * Dictionary types.
      */
     public enum DictionaryType {
-        NUMBER("DOUBLE"),
-        STRING("STRING"),
+        NUMBER("NUMBER"),
         DATETIME("DATETIME"),
-        NONE("NONE"),
-        REGEX("KEYWORD");
+        REGEX("REGEX");
 
         private final String type;
 
