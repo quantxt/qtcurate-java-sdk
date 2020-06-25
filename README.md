@@ -19,9 +19,7 @@ Add these to your pom.xml:
 ```
 
 
-Sample code:
+Look at the [Samples](src/main/java/com/quantxt/sdk/sample) for end to end examples
 
-`src/main/java/com/quantxt/sdk/sample`
-
-[Contact us](support@quantxt.com) for API key or technical questions.
+Contact us at <support@quantxt.com> for API key or technical questions.
 
