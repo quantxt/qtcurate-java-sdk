@@ -23,5 +23,5 @@ Sample code:
 
 `src/main/java/com/quantxt/sdk/sample`
 
-Contact support for API key or technical questions:
-`support@quantxt.com`
+[Contact us](support@quantxt.com) for API key or technical questions.
+
