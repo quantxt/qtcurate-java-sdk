@@ -7,7 +7,7 @@ Add these to your pom.xml:
             <name>Sonatype OSS Releases</name>
             <url>https://oss.sonatype.org/content/repositories/releases/</url>
         </repository>
-    </repositories>
+</repositories>
 ```
 
 ```
