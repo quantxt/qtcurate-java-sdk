@@ -28,7 +28,6 @@ public class FullTextSearchOnUrls {
         // 1- Configure and kick off the Parser job. This will prepare the document for keyword and phrase search
         DataProcess dataProcess = DataProcess.creator("My parser job " + Instant.now())
                 .excludeUttWithoutEntities(false)
-                .autoTag(false)
                 .urls(urls)
                 .create();
 

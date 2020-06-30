@@ -37,8 +37,6 @@ public class DataProcessCreator extends Creator<DataProcess> {
         }
     }
 
-    @JsonProperty("get_phrases")
-    private Boolean autoTag = false;
     private Integer maxTokenPerUtt = 500;
     private Integer minTokenPerUtt = 6;
     private Integer numWorkers = 8;
@@ -62,17 +60,6 @@ public class DataProcessCreator extends Creator<DataProcess> {
 
     public DataProcessCreator(String title) {
         this.title = title;
-    }
-
-    /**
-     * Indicates to  perform tagging or not.
-     *
-     * @param autoTag Auto tagging indicator.
-     * @return this
-     */
-    public DataProcessCreator autoTag(boolean autoTag) {
-        this.autoTag = autoTag;
-        return this;
     }
 
     /**

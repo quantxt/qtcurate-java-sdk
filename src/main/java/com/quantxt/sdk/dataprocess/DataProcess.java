@@ -40,6 +40,15 @@ public class DataProcess extends Resource {
     }
 
     /**
+     * Create a DataProcessDuplicator from an existing id
+     * @param id The name of the existing search id
+     * @return DataProcessDuplicator capable of executing the update
+     */
+    public static DataProcessDuplicator duplicator(String id) {
+        return new DataProcessDuplicator(id);
+    }
+
+    /**
      * Create a DataProcessReader to execute read.
      *
      * @return DataProcessReader capable of executing the read
@@ -129,7 +138,6 @@ public class DataProcess extends Resource {
     private Integer maxTokenPerUtt;
     private Integer minTokenPerUtt;
 
-    private boolean autoTag;
     private boolean sortByPosition;
     private boolean excludeUttWithoutEntities;
 
@@ -143,7 +151,6 @@ public class DataProcess extends Resource {
     private DataProcess(@JsonProperty("index") final String index,
                         @JsonProperty("title") final String title,
                         @JsonProperty("chunk") final String chunk,
-                        @JsonProperty("get_phrases") final Boolean autoTag,
                         @JsonProperty("maxTokenPerUtt") final Integer maxTokenPerUtt,
                         @JsonProperty("minTokenPerUtt") final Integer minTokenPerUtt,
                         @JsonProperty("sortByPosition") final boolean sortByPosition,
@@ -153,7 +160,6 @@ public class DataProcess extends Resource {
                         @JsonProperty("insights") final Insights insights) {
         this.index = index;
         this.title = title;
-        this.autoTag = autoTag;
         this.maxTokenPerUtt = maxTokenPerUtt;
         this.minTokenPerUtt = minTokenPerUtt;
         this.excludeUttWithoutEntities = excludeUttWithoutEntities;
@@ -180,15 +186,6 @@ public class DataProcess extends Resource {
      */
     public String getTitle() {
         return title;
-    }
-
-    /**
-     * Returns autoTag.
-     *
-     * @return autoTag.
-     */
-    public Boolean getAutoTag() {
-        return autoTag;
     }
 
     /**
@@ -250,7 +247,6 @@ public class DataProcess extends Resource {
         return "DataProcess{" +
                 "index='" + index + '\'' +
                 ", title='" + title + '\'' +
-                ", autoTag=" + autoTag +
                 ", chunk=" + chunk +
                 ", maxTokenPerUtt=" + maxTokenPerUtt +
                 ", minTokenPerUtt=" + minTokenPerUtt +
