@@ -23,6 +23,7 @@ public class SearchRule implements Serializable {
 
     private String vocabId;
     private String vocabValueType;
+    private String dataType;
     private String phraseMatchingPattern;
     private String [] phraseMatchingGroups;
 
@@ -38,6 +39,7 @@ public class SearchRule implements Serializable {
     @JsonCreator
     public SearchRule(@JsonProperty("vocabId") String vocabId,
                       @JsonProperty("vocabValueType") String vocabValueType,
+                      @JsonProperty("dataType") String dataType,
                       @JsonProperty("vocabRegex") String phraseMatchingPattern,
                       @JsonProperty("vocabRegexGroups") String [] phraseMatchingGroupStr,
                       @JsonProperty("skipPatternBetweenKeyAndValue") String skipPatternBetweenKeyAndValue,
@@ -49,6 +51,7 @@ public class SearchRule implements Serializable {
     {
         this.vocabId = vocabId;
         this.vocabValueType = vocabValueType;
+        this.dataType = dataType;
         this.phraseMatchingPattern = phraseMatchingPattern;
         this.phraseMatchingGroups = phraseMatchingGroupStr;
         this.skipPatternBetweenKeyAndValue = skipPatternBetweenKeyAndValue;
@@ -91,6 +94,11 @@ public class SearchRule implements Serializable {
 
     public SearchRule setSkipPatternBetweenKeyAndValue(String skipPatternBetweenKeyAndValue){
         this.skipPatternBetweenKeyAndValue = skipPatternBetweenKeyAndValue;
+        return this;
+    }
+
+    public SearchRule setDataType(String dataType){
+        this.dataType = dataType;
         return this;
     }
 
