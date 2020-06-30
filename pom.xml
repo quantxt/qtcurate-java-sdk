@@ -6,7 +6,7 @@
 
     <groupId>com.quantxt.sdk</groupId>
     <artifactId>qtcurate</artifactId>
-    <version>1.4.4-SNAPSHOT</version>
+    <version>1.4.4</version>
     <packaging>jar</packaging>
 
     <name>Theia SDK Search and Data Extraction</name>
