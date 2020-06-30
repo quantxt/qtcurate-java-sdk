@@ -14,7 +14,7 @@ Add these to your pom.xml:
 <dependency>
     <groupId>com.quantxt.sdk</groupId>
     <artifactId>qtcurate</artifactId>
-    <version>1.4.3</version>
+    <version>1.4.4</version>
 </dependency>
 ```
 
