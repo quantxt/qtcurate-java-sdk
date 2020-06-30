@@ -46,7 +46,6 @@ public class MiningContentWithDictionaries {
                 .excludeUttWithoutEntities(true)
                 .addRule(new SearchRule(dictionary, DataProcessCreator.DictionaryType.NUMBER))
                 .addRule(new SearchRule(dictionary, DataProcessCreator.DictionaryType.DATETIME))
-                .autoTag(false)
                 .files(documentUUids)
                 .create();
 

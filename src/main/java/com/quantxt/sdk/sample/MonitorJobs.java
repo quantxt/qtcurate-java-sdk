@@ -24,10 +24,10 @@ public class MonitorJobs {
         }
     }
 
-    public static void wiat4Job2Finish(String index) throws InterruptedException {
+    public static void wiat4Job2Finish(String id) throws InterruptedException {
         int percentage = 0;
         while (percentage < 100) {
-            Progress progress = Progress.fetcher(index)
+            Progress progress = Progress.fetcher(id)
                     .fetch();
             percentage = progress.getProgress();
 

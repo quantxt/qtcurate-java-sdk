@@ -56,7 +56,6 @@ public class SearchWithDocumentSample {
 
         DataProcess dataProcess = DataProcess.creator("Branko SDK " + Instant.now())
                 .excludeUttWithoutEntities(false)
-                .autoTag(false)
                 .files(files)
                 .addRule(rule)
                 .create();
