@@ -7,24 +7,27 @@ import com.quantxt.sdk.client.Response;
 import com.quantxt.sdk.exception.QTApiConnectionException;
 import com.quantxt.sdk.exception.QTApiException;
 import com.quantxt.sdk.exception.QTRestException;
+import com.quantxt.sdk.progress.Progress;
 import com.quantxt.sdk.resource.Fetcher;
+
+import static java.lang.Thread.sleep;
 
 public class DataProcessFetcher extends Fetcher<DataProcess> {
 
-    private String index;
+    private String id;
 
     /**
      * Construct a new {@link DataProcessFetcher}.
      *
-     * @param index The ID that identifies the resource to fetch
+     * @param id The ID that identifies the resource to fetch
      */
-    public DataProcessFetcher(String index) {
-        this.index = index;
+    public DataProcessFetcher(String id) {
+        this.id = id;
     }
 
     @Override
     public DataProcess fetch(QTRestClient client) {
-        Request request = new Request(HttpMethod.GET, "/search/" + this.index);
+        Request request = new Request(HttpMethod.GET, "/search/" + this.id);
 
         Response response = client.request(request);
 
@@ -47,5 +50,18 @@ public class DataProcessFetcher extends Fetcher<DataProcess> {
         }
 
         return DataProcess.fromJson(response.getStream(), "meta", client.getObjectMapper());
+    }
+
+    public void blockUntilFinish() throws InterruptedException {
+        int percentage = 0;
+        while (percentage < 100) {
+            Progress progress = Progress.fetcher(id).fetch();
+            percentage = progress.getProgress();
+            if (percentage < 100) {
+                sleep(1000);
+            }
+        }
+        // Wait for data to get propagated into elastic or final database
+        sleep(3000);
     }
 }
