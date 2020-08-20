@@ -58,7 +58,9 @@ public class Request {
     }
 
     public void setBody(final String body) {
-        this.body = body;
+        if (body != null && !body.isEmpty()) {
+            this.body = body;
+        }
     }
 
     public InputStream getInputStream() {

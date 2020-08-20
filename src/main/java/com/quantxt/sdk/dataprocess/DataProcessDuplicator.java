@@ -15,43 +15,30 @@ import com.quantxt.sdk.resource.Creator;
 import java.util.List;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-
 public class DataProcessDuplicator extends Creator<DataProcess> {
 
-        @JsonIgnore
-        private String id;
+    @JsonIgnore
+    private String id;
+    private List<String> files;
 
-        private List<String> sources;
-        private List<String> files;
-        private List<String> urls;
-
-    public DataProcessDuplicator(String id) {
+    public DataProcessDuplicator(String id){
         this.id = id;
     }
 
-        public DataProcessDuplicator sources(List<String> sources) {
-        this.sources = sources;
-        return this;
-    }
-
-        public DataProcessDuplicator files(List<String> files) {
+    public DataProcessDuplicator files(List<String> files) {
         this.files = files;
         return this;
     }
 
-        public DataProcessDuplicator urls(List<String> urls) {
-        this.urls = urls;
-        return this;
-    }
 
-        /**
-         * Make the request to the API to perform the create.
-         *
-         * @param client QTClient with which to make the request
-         * @return Created DataProcess
-         */
-        @Override
-        public DataProcess create(QTRestClient client) {
+    /**
+     * Make the request to the API to perform the create.
+     *
+     * @param client QTClient with which to make the request
+     * @return Created DataProcess
+     */
+    @Override
+    public DataProcess create(QTRestClient client) {
         Request request = new Request(HttpMethod.POST, "/search/new/" + this.id);
         addPayload(request, client);
 
@@ -76,13 +63,13 @@ public class DataProcessDuplicator extends Creator<DataProcess> {
         return DataProcess.fromJson(response.getStream(), client.getObjectMapper());
     }
 
-        /**
-         * Add the requested JSON body to the Request.
-         *
-         * @param request Request to add post params to
-         */
-        private void addPayload(final Request request, final QTRestClient client) {
-        if (sources == null && files == null && urls == null) return;
+    /**
+     * Add the requested JSON body to the Request.
+     *
+     * @param request Request to add post params to
+     */
+    private void addPayload(final Request request, final QTRestClient client) {
+        if (files == null) return;
         try {
             String requestBody = client.getObjectMapper().writeValueAsString(this);
             if (requestBody != null && !requestBody.isEmpty()) {

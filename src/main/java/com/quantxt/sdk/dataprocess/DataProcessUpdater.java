@@ -20,26 +20,14 @@ public class DataProcessUpdater extends Creator<DataProcess> {
     @JsonIgnore
     private String id;
 
-    private List<String> sources;
     private List<String> files;
-    private List<String> urls;
 
     public DataProcessUpdater(String id) {
         this.id = id;
     }
 
-    public DataProcessUpdater sources(List<String> sources) {
-        this.sources = sources;
-        return this;
-    }
-
     public DataProcessUpdater files(List<String> files) {
         this.files = files;
-        return this;
-    }
-
-    public DataProcessUpdater urls(List<String> urls) {
-        this.urls = urls;
         return this;
     }
 
@@ -81,7 +69,7 @@ public class DataProcessUpdater extends Creator<DataProcess> {
      * @param request Request to add post params to
      */
     private void addPayload(final Request request, final QTRestClient client) {
-        if (sources == null && files == null && urls == null) return;
+        if (files == null) return;
         try {
             String requestBody = client.getObjectMapper().writeValueAsString(this);
             if (requestBody != null && !requestBody.isEmpty()) {

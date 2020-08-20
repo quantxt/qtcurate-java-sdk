@@ -1,18 +1,18 @@
 package com.quantxt.sdk.dataprocess;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quantxt.sdk.exception.QTApiConnectionException;
 import com.quantxt.sdk.exception.QTApiException;
+import com.quantxt.sdk.model.Extractor;
 import com.quantxt.sdk.resource.Resource;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,13 +21,19 @@ public class DataProcess extends Resource {
 
     private static final long serialVersionUID = 7089357972945039793L;
 
+    private String id;
+    private String description;
+    private List<Extractor> extractors;
+    private List<String> files;
+    private Integer numWorkers = 8;
+
     /**
      * Create a DataProcessCreator to execute create.
-     * @param title The name for the data mining job
+     * @param description The description for the data mining job
      * @return DataProcessCreator capable of executing the create
      */
-    public static DataProcessCreator creator(String title) {
-        return new DataProcessCreator(title);
+    public static DataProcessCreator creator(String description) {
+        return new DataProcessCreator(description);
     }
 
     /**
@@ -60,21 +66,21 @@ public class DataProcess extends Resource {
     /**
      * Create a DataProcessFetcher to execute fetch.
      *
-     * @param index The ID that identifies the resource to fetch
+     * @param id The ID that identifies the resource to fetch
      * @return DataProcessFetcher capable of executing the fetch
      */
-    public static DataProcessFetcher fetcher(String index) {
-        return new DataProcessFetcher(index);
+    public static DataProcessFetcher fetcher(String id) {
+        return new DataProcessFetcher(id);
     }
 
     /**
      * Create a DataProcessDeleter to execute delete.
      *
-     * @param index The index of the DataProcess resource to delete
+     * @param id The id of the DataProcess resource to delete
      * @return DataProcessDeleter capable of executing the delete
      */
-    public static DataProcessDeleter deleter(String index) {
-        return new DataProcessDeleter(index);
+    public static DataProcessDeleter deleter(String id) {
+        return new DataProcessDeleter(id);
     }
 
     /**
@@ -132,42 +138,37 @@ public class DataProcess extends Resource {
         }
     }
 
-    private String index;
-    private String title;
+    public DataProcess() {
+        this.extractors = new ArrayList<>();
+        this.files = new ArrayList<>();
+    }
 
-    private Integer maxTokenPerUtt;
-    private Integer minTokenPerUtt;
+    public Integer getNumWorkers() {
+        return numWorkers;
+    }
 
-    private boolean sortByPosition;
-    private boolean excludeUttWithoutEntities;
+    public void setNumWorkers(Integer numWorkers) {
+        this.numWorkers = numWorkers;
+    }
 
-    private SearchRule.ChunkMode chunk;
-    private List<SearchRule> searchDictionaries;
-    private List<String> files;
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    private Insights insights;
+    public String getDescription() {
+        return description;
+    }
 
-    @JsonCreator
-    private DataProcess(@JsonProperty("index") final String index,
-                        @JsonProperty("title") final String title,
-                        @JsonProperty("chunk") final String chunk,
-                        @JsonProperty("maxTokenPerUtt") final Integer maxTokenPerUtt,
-                        @JsonProperty("minTokenPerUtt") final Integer minTokenPerUtt,
-                        @JsonProperty("sortByPosition") final boolean sortByPosition,
-                        @JsonProperty("excludeUttWithoutEntities") final boolean excludeUttWithoutEntities,
-                        @JsonProperty("searchDictionaries") final List<SearchRule> searchDictionaries,
-                        @JsonProperty("files") final List<String> files,
-                        @JsonProperty("insights") final Insights insights) {
-        this.index = index;
-        this.title = title;
-        this.maxTokenPerUtt = maxTokenPerUtt;
-        this.minTokenPerUtt = minTokenPerUtt;
-        this.excludeUttWithoutEntities = excludeUttWithoutEntities;
-        this.sortByPosition = sortByPosition;
-        this.searchDictionaries = searchDictionaries;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setExtractors(List<Extractor> extractors) {
+        this.extractors = extractors;
+    }
+
+    public void setFiles(List<String> files) {
         this.files = files;
-        this.insights = insights;
-        this.chunk = chunk == null || chunk.isEmpty() ? SearchRule.ChunkMode.SENTENCE : SearchRule.ChunkMode.valueOf(chunk);
     }
 
     /**
@@ -175,85 +176,35 @@ public class DataProcess extends Resource {
      *
      * @return DataProcess ID.
      */
-    public String getIndex() {
-        return index;
+    public String getId() {
+        return id;
     }
 
     /**
-     * Returns title.
+     * Returns list of extractors.
      *
-     * @return title.
+     * @return extractors.
      */
-    public String getTitle() {
-        return title;
+    public List<Extractor> getExtractors() {
+        return extractors;
     }
 
     /**
-     * Returns maxTokenPerUtt.
+     * Returns list of file uuids processed.
      *
-     * @return maxTokenPerUtt.
-     */
-    public Integer getMaxTokenPerUtt() {
-        return maxTokenPerUtt;
-    }
-
-    /**
-     * Returns minTokenPerUtt.
-     *
-     * @return minTokenPerUtt.
-     */
-    public Integer getMinTokenPerUtt() {
-        return minTokenPerUtt;
-    }
-
-    /**
-     * Returns excludeUttWithoutEntities.
-     *
-     * @return excludeUttWithoutEntities.
-     */
-    public boolean isExcludeUttWithoutEntities() {
-        return excludeUttWithoutEntities;
-    }
-
-    /**
-     * Returns searchDictionaries.
-     *
-     * @return searchDictionaries.
-     */
-    public List<SearchRule> getSearchDictionaries() {
-        return searchDictionaries;
-    }
-
-    /**
-     * Returns fields.
-     *
-     * @return fields.
+     * @return files.
      */
     public List<String> getFiles() {
         return files;
     }
 
-    /**
-     * Returns insights.
-     *
-     * @return insights.
-     */
-    public Insights getInsights() {
-        return insights;
-    }
-
     @Override
     public String toString() {
         return "DataProcess{" +
-                "index='" + index + '\'' +
-                ", title='" + title + '\'' +
-                ", chunk=" + chunk +
-                ", maxTokenPerUtt=" + maxTokenPerUtt +
-                ", minTokenPerUtt=" + minTokenPerUtt +
-                ", excludeUttWithoutEntities=" + excludeUttWithoutEntities +
-                ", searchDictionaries=" + searchDictionaries +
+                "id='" + id + '\'' +
+                ", description='" + description + '\'' +
+                ", extractors=" + extractors +
                 ", files=" + files +
-                ", insights=" + insights +
                 '}';
     }
 }

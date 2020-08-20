@@ -33,7 +33,7 @@ public class DictionaryUpdater extends Updater<Dictionary> {
     }
 
     /**
-     * The name of the dictionary.
+     * The name of the vocab.
      *
      * @param name Dictionary name.
      * @return this
@@ -44,7 +44,7 @@ public class DictionaryUpdater extends Updater<Dictionary> {
     }
 
     /**
-     * Add entries in the dictionary.
+     * Add entries in the vocab.
      *
      * @param entries List of Dictionary.Entry entries.
      * @return this
@@ -55,7 +55,7 @@ public class DictionaryUpdater extends Updater<Dictionary> {
     }
 
     /**
-     * Append single entry without category in the dictionary.
+     * Append single entry without category in the vocab.
      *
      * @param search_string   Dictionary entry key.
      * @return this
@@ -66,7 +66,7 @@ public class DictionaryUpdater extends Updater<Dictionary> {
     }
 
     /**
-     * Append single entry in the dictionary.
+     * Append single entry in the vocab.
      *
      * @param search_string   Dictionary entry key.
      * @param category Dictionary entry value.
@@ -78,7 +78,7 @@ public class DictionaryUpdater extends Updater<Dictionary> {
     }
 
     /**
-     * Append single entry in the dictionary.
+     * Append single entry in the vocab.
      *
      * @param entry Dictionary.Entry entry.
      * @return this
