@@ -2,17 +2,17 @@ Add these to your pom.xml:
 
 ```
 <repositories>
-        <repository>
-            <id>oss-snapshots</id>
-            <name>Sonatype OSS Releases</name>
-            <url>https://oss.sonatype.org/content/repositories/releases/</url>
-        </repository>
+  <repository>
+    <id>oss-snapshots</id>
+    <name>Sonatype OSS Releases</name>
+    <url>https://oss.sonatype.org/content/repositories/releases/</url>
+  </repository>
 </repositories>
 
 <dependency>
-    <groupId>com.quantxt.sdk</groupId>
-    <artifactId>qtcurate</artifactId>
-    <version>2.0.0</version>
+  <groupId>com.quantxt.sdk</groupId>
+  <artifactId>qtcurate</artifactId>
+  <version>2.0.0</version>
 </dependency>
 ```
 
