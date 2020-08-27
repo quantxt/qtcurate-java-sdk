@@ -8,9 +8,7 @@ Add these to your pom.xml:
             <url>https://oss.sonatype.org/content/repositories/releases/</url>
         </repository>
 </repositories>
-```
 
-```
 <dependency>
     <groupId>com.quantxt.sdk</groupId>
     <artifactId>qtcurate</artifactId>
