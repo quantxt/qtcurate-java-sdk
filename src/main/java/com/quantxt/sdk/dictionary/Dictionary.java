@@ -2,6 +2,7 @@ package com.quantxt.sdk.dictionary;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -20,6 +21,11 @@ public class Dictionary extends Resource {
 
     private static final long serialVersionUID = 554603237874587L;
 
+    private String id;
+    private String name;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<DictionaryEntry> entries;
+
     /**
      * Create a DictionaryCreator to execute create.
      *
@@ -32,7 +38,7 @@ public class Dictionary extends Resource {
     /**
      * Create a DictionaryUpdater to execute update.
      *
-     * @param id Id of the dictionary to be updated
+     * @param id Id of the vocab to be updated
      * @return DictionaryUpdater capable of executing the update
      */
     public static DictionaryUpdater updater(String id) {
@@ -102,24 +108,17 @@ public class Dictionary extends Resource {
         }
     }
 
-    private String id;
-    private String name;
-    private Boolean global;
-    private List<DictionaryEntry> entries;
-
     @JsonCreator
-    private Dictionary(@JsonProperty("id") final String id,
+    public Dictionary(@JsonProperty("id") final String id,
                        @JsonProperty("name") final String name,
-                       @JsonProperty("global") final Boolean global,
                        @JsonProperty("entries") final List<DictionaryEntry> entries) {
         this.id = id;
         this.name = name;
-        this.global = global;
         this.entries = entries;
     }
 
     /**
-     * Returns dictionary ID.
+     * Returns vocab ID.
      *
      * @return Dictionary ID.
      */
@@ -128,7 +127,7 @@ public class Dictionary extends Resource {
     }
 
     /**
-     * Returns dictionary name.
+     * Returns vocab name.
      *
      * @return Dictionary name.
      */
@@ -136,31 +135,13 @@ public class Dictionary extends Resource {
         return name;
     }
 
-    /**
-     * Returns indicator whether this dictionary is global/available to all users.
-     *
-     * @return Dictionary global indicator.
-     */
-    public Boolean getGlobal() {
-        return global;
-    }
 
     /**
-     * Returns dictionary entries.
+     * Returns vocab entries.
      *
      * @return Dictionary entries.
      */
     public List<DictionaryEntry> getEntries() {
         return entries;
-    }
-
-    @Override
-    public String toString() {
-        return "Dictionary{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", global=" + global +
-                ", entries=" + entries +
-                '}';
     }
 }

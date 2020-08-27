@@ -5,10 +5,8 @@ import com.quantxt.sdk.progress.Progress;
 
 import java.util.List;
 
-import static java.lang.Thread.sleep;
-
 public class MonitorJobs {
-    private static final String API_KEY = "123456";
+    private static final String API_KEY = "__APIKEY__";
 
     public static void main(String[] args) {
         QT.init(API_KEY);
@@ -20,20 +18,6 @@ public class MonitorJobs {
             for (Progress p : progressList) {
                 String id = p.getId();
                 System.out.println("Job " + id + " " + p.getProgress() +"% completed.");
-            }
-        }
-    }
-
-    public static void wiat4Job2Finish(String id) throws InterruptedException {
-        int percentage = 0;
-        while (percentage < 100) {
-            Progress progress = Progress.fetcher(id)
-                    .fetch();
-            percentage = progress.getProgress();
-
-            System.out.println(String.format("Search progress: %s", percentage));
-            if (percentage < 100) {
-                sleep(1000);
             }
         }
     }

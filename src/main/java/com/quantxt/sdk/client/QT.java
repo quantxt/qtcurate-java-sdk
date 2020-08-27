@@ -25,7 +25,7 @@ public class QT {
      * Initialize the QT environment.
      *
      * @param apiKey API key to use
-     * @param apiKey server enviroment to use
+     * @param env server enviroment to use
      */
     public static void init(final String apiKey, final String env) {
         if (env != null ){

@@ -13,9 +13,6 @@ import com.quantxt.sdk.exception.QTApiException;
 import com.quantxt.sdk.exception.QTRestException;
 import com.quantxt.sdk.resource.Creator;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +24,9 @@ public class DictionaryCreator extends Creator<Dictionary> {
     private String name;
     private List<DictionaryEntry> entries = new ArrayList<>();
     private InputStream inputStream;
-    private String fileName;
 
     /**
-     * The name of the dictionary.
+     * The name of the vocab.
      *
      * @param name Dictionary name.
      * @return this
@@ -41,7 +37,7 @@ public class DictionaryCreator extends Creator<Dictionary> {
     }
 
     /**
-     * Entries in the dictionary.
+     * Entries in the vocab.
      *
      * @param entries Dictionary entries.
      * @return this
@@ -52,7 +48,7 @@ public class DictionaryCreator extends Creator<Dictionary> {
     }
 
     /**
-     * Append single entry in the dictionary. Category is set the same as the search string.
+     * Append single entry in the vocab. Category is set the same as the search string.
      *
      * @param search_string   String to be searched in raw content.
      * @return this
@@ -64,7 +60,7 @@ public class DictionaryCreator extends Creator<Dictionary> {
     }
 
     /**
-     * Append single search string with category in the dictionary.
+     * Append single search string with category in the vocab.
      *
      * @param search_string   String to be searched in raw content.
      * @param category        Category.
@@ -76,33 +72,14 @@ public class DictionaryCreator extends Creator<Dictionary> {
     }
 
     /**
-     * The inputStream of the dictionary source.
+     * The inputStream of the vocab source.
      *
-     * @param inputStream Dictionary inputStream.
-     * @param sourceName  Dictionary source name.
+     * @param inputStream Dictionary file inputStream.
      * @return this
      */
-    public DictionaryCreator source(InputStream inputStream, String sourceName) {
+    public DictionaryCreator source(InputStream inputStream) {
         this.inputStream = inputStream;
-        this.fileName = sourceName;
         return this;
-    }
-
-    /**
-     * Specifies a file as a dictionary input.
-     *
-     * @param file Dictionary file.
-     * @return this
-     */
-    public DictionaryCreator source(File file) {
-        try {
-            this.inputStream = new FileInputStream(file);
-            this.fileName = file.getName();
-
-            return this;
-        } catch (FileNotFoundException e) {
-            throw new QTApiException("Error processing specified dictionary source.", e);
-        }
     }
 
     /**
@@ -164,7 +141,7 @@ public class DictionaryCreator extends Creator<Dictionary> {
             }
         } else {
             request.setInputStream(this.inputStream);
-            request.setFileName(this.fileName);
+     //       request.setFileName(this.fileName);
             request.addPostParam("name", name);
         }
     }

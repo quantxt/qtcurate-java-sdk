@@ -9,10 +9,14 @@ import com.quantxt.sdk.exception.QTApiException;
 import com.quantxt.sdk.exception.QTRestException;
 import com.quantxt.sdk.progress.Progress;
 import com.quantxt.sdk.resource.Fetcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static java.lang.Thread.sleep;
 
 public class DataProcessFetcher extends Fetcher<DataProcess> {
+
+    final private static Logger log = LoggerFactory.getLogger(DataProcessFetcher.class);
 
     private String id;
 
@@ -52,16 +56,21 @@ public class DataProcessFetcher extends Fetcher<DataProcess> {
         return DataProcess.fromJson(response.getStream(), "meta", client.getObjectMapper());
     }
 
-    public void blockUntilFinish() throws InterruptedException {
+    public void blockUntilFinish() {
         int percentage = 0;
-        while (percentage < 100) {
-            Progress progress = Progress.fetcher(id).fetch();
-            percentage = progress.getProgress();
-            if (percentage < 100) {
-                sleep(1000);
+        try {
+            sleep(2000);
+            while (percentage < 100) {
+                Progress progress = Progress.fetcher(id).fetch();
+                percentage = progress.getProgress();
+                if (percentage < 100) {
+                    sleep(1000);
+                }
             }
+            // Wait for data to get propagated into elastic or final database
+            sleep(4000);
+        } catch (Exception e){
+            log.error(e.getMessage());
         }
-        // Wait for data to get propagated into elastic or final database
-        sleep(3000);
     }
 }

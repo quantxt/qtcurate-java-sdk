@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @param <T> type of the resource
  */
-public abstract class Reader<T extends Resource> {
+public abstract class Reader<T> extends Resource {
 
     /**
      * Execute a request using default client.

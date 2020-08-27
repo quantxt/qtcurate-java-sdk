@@ -8,7 +8,7 @@ import com.quantxt.sdk.client.QTRestClient;
  *
  * @param <T> type of the resource
  */
-public abstract class Fetcher<T extends Resource> {
+public abstract class Fetcher<T> extends Resource {
 
     /**
      * Execute a request using default client.

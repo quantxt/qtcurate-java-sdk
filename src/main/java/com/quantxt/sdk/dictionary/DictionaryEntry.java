@@ -1,18 +1,22 @@
 package com.quantxt.sdk.dictionary;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class DictionaryEntry {
 
-    private String category;
     private String str;
+    private String category;
 
-    @JsonCreator
-    public DictionaryEntry(@JsonProperty("category") final String category,
-                           @JsonProperty("str") final String search_string) {
+    public DictionaryEntry(){
+
+    }
+
+    public DictionaryEntry(final String str) {
+        this.str = str;
+    }
+
+    public DictionaryEntry(final String category,
+                           final String str) {
         this.category = category;
-        this.str = search_string;
+        this.str = str;
     }
 
     /**
@@ -29,7 +33,7 @@ public class DictionaryEntry {
      *
      * @return Entry search string.
      */
-    public String getSearch_string() {
+    public String getStr() {
         return str;
     }
 
@@ -37,7 +41,15 @@ public class DictionaryEntry {
     public String toString() {
         return "Entry{" +
                 "category='" + category + '\'' +
-                ", search_string='" + str + '\'' +
+                ",str='" + str + '\'' +
                 '}';
+    }
+
+    public void setStr(String str) {
+        this.str = str;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

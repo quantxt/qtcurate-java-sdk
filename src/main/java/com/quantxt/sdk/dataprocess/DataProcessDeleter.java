@@ -11,20 +11,20 @@ import com.quantxt.sdk.resource.Deleter;
 
 public class DataProcessDeleter extends Deleter<DataProcess> {
 
-    private final String index;
+    private final String id;
 
     /**
      * Construct a new DataProcessDeleter.
      *
-     * @param index The index of the data process resource to delete
+     * @param id The index of the data process resource to delete
      */
-    public DataProcessDeleter(String index) {
-        this.index = index;
+    public DataProcessDeleter(String id) {
+        this.id = id;
     }
 
     @Override
     public boolean delete(QTRestClient client) {
-        Request request = new Request(HttpMethod.DELETE, "/search/" + index);
+        Request request = new Request(HttpMethod.DELETE, "/search/" + id);
 
         Response response = client.request(request);
 

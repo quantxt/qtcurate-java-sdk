@@ -1,7 +1,6 @@
 package com.quantxt.sdk.dataprocess;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.quantxt.sdk.client.HttpMethod;
 import com.quantxt.sdk.client.QTRestClient;
@@ -10,6 +9,9 @@ import com.quantxt.sdk.client.Response;
 import com.quantxt.sdk.exception.QTApiConnectionException;
 import com.quantxt.sdk.exception.QTApiException;
 import com.quantxt.sdk.exception.QTRestException;
+import com.quantxt.sdk.model.Extractor;
+import com.quantxt.sdk.model.DictionaryDto;
+import com.quantxt.sdk.model.SearchRequestDto;
 import com.quantxt.sdk.resource.Creator;
 
 import java.util.ArrayList;
@@ -18,135 +20,43 @@ import java.util.List;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class DataProcessCreator extends Creator<DataProcess> {
 
-    /**
-     * Dictionary types.
-     */
-    public enum DictionaryType {
-        NUMBER("NUMBER"),
-        DATETIME("DATETIME"),
-        REGEX("REGEX");
+    private DataProcess dataProcess;
 
-        private final String type;
-
-        DictionaryType(final String type) {
-            this.type = type;
-        }
-
-        public String toString() {
-            return type;
-        }
+    public DataProcessCreator(String description){
+        dataProcess = new DataProcess();
+        dataProcess.setDescription(description);
     }
 
-    private Integer maxTokenPerUtt = 500;
-    private Integer minTokenPerUtt = 6;
-    private Integer numWorkers = 8;
-    private boolean excludeUttWithoutEntities = true;
+    public DataProcessCreator withNumWorkers(Integer numWorkers) {
+        this.dataProcess.setNumWorkers(numWorkers);
+        return this;
+    }
 
-    private String query;
-
-    @JsonProperty("_sortByPosition")
-    private boolean sortByPosition = false;
-
-    private List<String> sources;
-
-    private String title;
-    @JsonProperty("stitle")
-    private String cmd;
-
-    private SearchRule.ChunkMode chunk;
-    private List<SearchRule> searchDictionaries = new ArrayList<>();
-    private List<String> files = new ArrayList<>();
-    private List<String> urls = new ArrayList<>();
-
-    public DataProcessCreator(String title) {
-        this.title = title;
+    public DataProcessCreator withFiles(List<String> files) {
+        this.dataProcess.setFiles(files);
+        return this;
     }
 
     /**
-     * Max token per UTT.
+     * Adds an extractors rule.
      *
-     * @param maxTokenPerUtt Max token per UTT.
+     * @param extractor Extractor to parse text.
      * @return this
      */
-    public DataProcessCreator maxTokenPerUtt(Integer maxTokenPerUtt) {
-        this.maxTokenPerUtt = maxTokenPerUtt;
-        return this;
-    }
-
-    public DataProcessCreator minTokenPerUtt(Integer minTokenPerUtt) {
-        this.minTokenPerUtt = minTokenPerUtt;
-        return this;
-    }
-
-    public DataProcessCreator numWorkers(Integer numWorkers) {
-        this.numWorkers = numWorkers;
-        return this;
-    }
-
-    public DataProcessCreator excludeUttWithoutEntities(boolean excludeUttWithoutEntities) {
-        this.excludeUttWithoutEntities = excludeUttWithoutEntities;
-        return this;
-    }
-
-    public DataProcessCreator cmd(String cmd) {
-        this.cmd = cmd;
-        return this;
-    }
-
-    public DataProcessCreator sourceIDs(List<String> sources) {
-        this.sources = sources;
-        return this;
-    }
-
-    public DataProcessCreator query(String query) {
-        this.query = query;
-        return this;
-    }
-
-    public DataProcessCreator chunk(String chunk) {
-        this.chunk = SearchRule.ChunkMode.valueOf(chunk);
-        return this;
-    }
-
-    public DataProcessCreator sortByPosition(boolean sortByPosition) {
-        this.sortByPosition = sortByPosition;
-        return this;
-    }
-
-    public DataProcessCreator files(List<String> files) {
-        this.files = files;
-        return this;
-    }
-
-    public DataProcessCreator urls(List<String> urls) {
-        this.urls = urls;
+    public DataProcessCreator addExtractor(Extractor extractor) {
+        this.dataProcess.getExtractors().add(extractor);
         return this;
     }
 
     /**
-     * Adds a search rule.
+     * Specifies the Extraction Dictionaries
      *
-     * @param searchRule Search rule.
+     * @param extractors list of extractors
      * @return this
      */
-    public DataProcessCreator addRule(SearchRule searchRule) {
-        this.searchDictionaries.add(searchRule);
+    public DataProcessCreator withExtractors(List<Extractor> extractors) {
+        this.dataProcess.setExtractors(extractors);
         return this;
-    }
-
-    /**
-     * Specifies the search rules.
-     *
-     * @param searchRules Search rules.
-     * @return this
-     */
-    public DataProcessCreator rules(List<SearchRule> searchRules) {
-        this.searchDictionaries = searchRules;
-        return this;
-    }
-
-    private String formatDictionary(String dictionary, DictionaryType type) {
-        return dictionary + "||" + type;
     }
 
     /**
@@ -188,7 +98,19 @@ public class DataProcessCreator extends Creator<DataProcess> {
      */
     private void addPayload(final Request request, final QTRestClient client) {
         try {
-            request.setBody(client.getObjectMapper().writeValueAsString(this));
+            // convert to SearchRequestDto
+            SearchRequestDto searchRequestDto = new SearchRequestDto();
+            searchRequestDto.setFiles(dataProcess.getFiles());
+            searchRequestDto.setNumWorkers(dataProcess.getNumWorkers());
+            searchRequestDto.setTitle(dataProcess.getDescription());
+            // convert dictionaries
+            List<DictionaryDto> dictionaryDtos = new ArrayList<>();
+            for (Extractor extractor : dataProcess.getExtractors()){
+                DictionaryDto dictionaryDto = new DictionaryDto(extractor);
+                dictionaryDtos.add(dictionaryDto);
+            }
+            searchRequestDto.setSearchDictionaries(dictionaryDtos);
+            request.setBody(client.getObjectMapper().writeValueAsString(searchRequestDto));
         } catch (JsonProcessingException e) {
             throw new QTApiException(e.getMessage(), e);
         }

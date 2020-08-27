@@ -22,7 +22,7 @@ public class DictionaryReader extends Reader<Dictionary> {
     }
 
     /**
-     * Read only the global dictionaries.
+     * Read only the global vocabs.
      *
      * @return this
      */
@@ -35,7 +35,7 @@ public class DictionaryReader extends Reader<Dictionary> {
      * Make the request to the Quantxt API to perform the fetch.
      *
      * @param client QTClient with which to make the request
-     * @return List of dictionaries
+     * @return List of vocabs
      */
     @Override
     public List<Dictionary> read(QTRestClient client) {

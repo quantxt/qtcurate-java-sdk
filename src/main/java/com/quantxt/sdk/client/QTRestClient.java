@@ -1,6 +1,8 @@
 package com.quantxt.sdk.client;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.util.function.Predicate;
 
@@ -18,7 +20,9 @@ public class QTRestClient {
     private QTRestClient(Builder b) {
         this.apiKey = b.apiKey;
         this.httpClient = b.httpClient;
-        this.objectMapper = new ObjectMapper();
+        this.objectMapper = new ObjectMapper()
+                .registerModule(new JavaTimeModule())
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     /**

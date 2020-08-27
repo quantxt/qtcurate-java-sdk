@@ -1,6 +1,5 @@
-package com.quantxt.sdk.search;
+package com.quantxt.sdk.result;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -13,15 +12,14 @@ import com.quantxt.sdk.exception.QTApiException;
 import com.quantxt.sdk.exception.QTRestException;
 import com.quantxt.sdk.resource.Exporter;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class XlsxSearchExporter extends Exporter<Search> {
+import static com.quantxt.sdk.result.Result.toByteArray;
+
+public class ResultXlsxExporter extends Exporter<byte[]> {
 
     /**
      * Available sort properties.
@@ -47,33 +45,31 @@ public class XlsxSearchExporter extends Exporter<Search> {
         ASC("0"),
         DESC("1");
 
-        private final String sortOrder;
+        private final String order;
 
         SortOrder(final String sortOrder) {
-            this.sortOrder = sortOrder;
+            this.order = sortOrder;
         }
 
         public String toString() {
-            return sortOrder;
+            return order;
         }
     }
 
     @JsonIgnore
     private String id;
     private String query;
-    @JsonProperty("sort")
-    private Sort sortBy = Sort.DATE;
+    private Sort sort = Sort.DATE;
     private SortOrder sortOrder = SortOrder.ASC;
     @JsonProperty("startDate")
     private Date from;
     @JsonProperty("endDate")
     private Date to;
     private List<String> filters = new ArrayList<>();
-    @JsonProperty("size")
-    private Integer limit = 5000;
+    private Integer size = 5000;
     private List<String> columns = new ArrayList<>();
 
-    public XlsxSearchExporter(String id) {
+    public ResultXlsxExporter(String id) {
         this.id = id;
     }
 
@@ -83,7 +79,7 @@ public class XlsxSearchExporter extends Exporter<Search> {
      * @param query Export filtering query.
      * @return this
      */
-    public XlsxSearchExporter query(String query) {
+    public ResultXlsxExporter query(String query) {
         this.query = query;
         return this;
     }
@@ -91,11 +87,11 @@ public class XlsxSearchExporter extends Exporter<Search> {
     /**
      * The sort property of the export.
      *
-     * @param sortBy Export sort by property.
+     * @param sort Export sort by property.
      * @return this
      */
-    public XlsxSearchExporter sortBy(Sort sortBy) {
-        this.sortBy = sortBy;
+    public ResultXlsxExporter sortBy(Sort sort) {
+        this.sort = sort;
         return this;
     }
 
@@ -105,7 +101,7 @@ public class XlsxSearchExporter extends Exporter<Search> {
      * @param sortOrder Export sort order.
      * @return this
      */
-    public XlsxSearchExporter sortOrder(SortOrder sortOrder) {
+    public ResultXlsxExporter sortOrder(SortOrder sortOrder) {
         this.sortOrder = sortOrder;
         return this;
     }
@@ -116,7 +112,7 @@ public class XlsxSearchExporter extends Exporter<Search> {
      * @param from Export data from date.
      * @return this
      */
-    public XlsxSearchExporter from(Date from) {
+    public ResultXlsxExporter from(Date from) {
         this.from = from;
         return this;
     }
@@ -127,7 +123,7 @@ public class XlsxSearchExporter extends Exporter<Search> {
      * @param to Export data to date.
      * @return this
      */
-    public XlsxSearchExporter to(Date to) {
+    public ResultXlsxExporter to(Date to) {
         this.to = to;
         return this;
     }
@@ -135,11 +131,14 @@ public class XlsxSearchExporter extends Exporter<Search> {
     /**
      * The results limit in the data export.
      *
-     * @param limit Export results number limit.
+     * @param size Export results number limit.
      * @return this
      */
-    public XlsxSearchExporter limit(Integer limit) {
-        this.limit = limit;
+    public ResultXlsxExporter size(Integer size) {
+        this.size = size;
+        if (size > 5000){
+            this.size = 5000;
+        }
         return this;
     }
 
@@ -149,7 +148,7 @@ public class XlsxSearchExporter extends Exporter<Search> {
      * @param columns Columns to be included in the export.
      * @return this
      */
-    public XlsxSearchExporter columns(List<String> columns) {
+    public ResultXlsxExporter columns(List<String> columns) {
         this.columns = columns;
         return this;
     }
@@ -160,7 +159,7 @@ public class XlsxSearchExporter extends Exporter<Search> {
      * @param filters Filters for export.
      * @return this
      */
-    public XlsxSearchExporter filters(List<String> filters) {
+    public ResultXlsxExporter filters(List<String> filters) {
         this.filters = filters;
         return this;
     }
@@ -207,15 +206,5 @@ public class XlsxSearchExporter extends Exporter<Search> {
         } catch (JsonProcessingException e) {
             throw new QTApiException(e.getMessage(), e);
         }
-    }
-
-    private byte[] toByteArray(InputStream is) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        int reads = is.read();
-        while(reads != -1){
-            baos.write(reads);
-            reads = is.read();
-        }
-        return baos.toByteArray();
     }
 }

@@ -8,14 +8,14 @@ import com.quantxt.sdk.client.QTRestClient;
  *
  * @param <T> type of the resource
  */
-public abstract class Exporter<T extends Resource> {
+public abstract class Exporter<T> extends Resource {
 
     /**
      * Execute a request using default client.
      *
      * @return Requested object
      */
-    public byte[] export() {
+    public T export() {
         return export(QT.getRestClient());
     }
 
@@ -25,5 +25,5 @@ public abstract class Exporter<T extends Resource> {
      * @param client client used to make request
      * @return Requested object data
      */
-    public abstract byte[] export(final QTRestClient client);
+    public abstract T export(final QTRestClient client);
 }

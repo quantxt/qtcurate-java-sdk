@@ -1,6 +1,5 @@
-package com.quantxt.sdk.search;
+package com.quantxt.sdk.result;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.quantxt.sdk.client.HttpMethod;
 import com.quantxt.sdk.client.QTRestClient;
@@ -11,22 +10,21 @@ import com.quantxt.sdk.exception.QTApiException;
 import com.quantxt.sdk.exception.QTRestException;
 import com.quantxt.sdk.resource.Exporter;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class JsonSearchExporter extends Exporter<Search> {
+import static com.quantxt.sdk.result.Result.toByteArray;
+
+public class ResultRawExporter extends Exporter<String> {
 
     @JsonIgnore
     private String id;
 
-    public JsonSearchExporter(String id) {
+    public ResultRawExporter(String id) {
         this.id = id;
     }
 
     @Override
-    public byte[] export(QTRestClient client) {
+    public String export(QTRestClient client) {
         Request request = new Request(HttpMethod.GET, String.format("/reports/%s/json", this.id));
 
         Response response = client.request(request);
@@ -48,21 +46,9 @@ public class JsonSearchExporter extends Exporter<Search> {
         }
 
         try {
-            return toByteArray(response.getStream());
+            return new String(toByteArray(response.getStream()));
         } catch (IOException e) {
             throw new QTApiException("JSON search export failed. Unable to read the data.", e);
         }
     }
-
-    //TODO: this method is also used in XlsSearchExporter, reuse it
-    private byte[] toByteArray(InputStream is) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        int reads = is.read();
-        while(reads != -1){
-            baos.write(reads);
-            reads = is.read();
-        }
-        return baos.toByteArray();
-    }
-
 }
