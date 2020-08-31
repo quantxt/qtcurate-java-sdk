@@ -13,22 +13,11 @@ import java.util.List;
 
 public class DictionaryReader extends Reader<Dictionary> {
 
-    private boolean global = false;
-
     /**
      * Construct a new DictionaryReader.
      */
-    public DictionaryReader() {
-    }
 
-    /**
-     * Read only the global vocabs.
-     *
-     * @return this
-     */
-    public DictionaryReader global() {
-        this.global = true;
-        return this;
+    public DictionaryReader() {
     }
 
     /**
@@ -39,7 +28,7 @@ public class DictionaryReader extends Reader<Dictionary> {
      */
     @Override
     public List<Dictionary> read(QTRestClient client) {
-        String uri = global ? "/dictionaries/global" : "/dictionaries";
+        String uri = "/dictionaries";
         Request request = new Request(HttpMethod.GET, uri);
 
         Response response = client.request(request);

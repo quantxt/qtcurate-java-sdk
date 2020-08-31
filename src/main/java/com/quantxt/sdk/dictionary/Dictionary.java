@@ -56,7 +56,7 @@ public class Dictionary extends Resource {
     }
 
     /**
-     * Create a DictionaryReader to execute read.
+     * Create a DictionaryReader to get list of available dictionaries.
      *
      * @return DictionaryReader capable of executing the read
      */

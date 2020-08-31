@@ -44,6 +44,7 @@ public class DataProcessCreator extends Creator<DataProcess> {
      * @param extractor Extractor to parse text.
      * @return this
      */
+
     public DataProcessCreator addExtractor(Extractor extractor) {
         this.dataProcess.getExtractors().add(extractor);
         return this;
@@ -92,6 +93,7 @@ public class DataProcessCreator extends Creator<DataProcess> {
         try {
             SearchRequestDto searchRequestDto = client.getObjectMapper().readValue(response.getStream(), SearchRequestDto.class);
             dataProcess.setId(searchRequestDto.getId());
+
             return dataProcess;
 
         } catch (Exception e){

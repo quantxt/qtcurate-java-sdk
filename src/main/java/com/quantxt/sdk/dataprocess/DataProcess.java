@@ -1,6 +1,7 @@
 package com.quantxt.sdk.dataprocess;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.quantxt.sdk.dictionary.DictionaryReader;
 import com.quantxt.sdk.document.Document;
 import com.quantxt.sdk.model.Extractor;
 import com.quantxt.sdk.resource.Resource;
@@ -29,15 +30,6 @@ public class DataProcess extends Resource {
     }
 
     /**
-     * Create a DataProcessDuplicator from an existing id
-     * @param id The name of the existing search id
-     * @return DataProcessDuplicator capable of executing the update
-     */
-    public static DataProcessDuplicator duplicator(String id) {
-        return new DataProcessDuplicator(id);
-    }
-
-    /**
      * Create a DataProcessFetcher to execute fetch.
      *
      * @param id The ID that identifies the resource to fetch
@@ -53,6 +45,16 @@ public class DataProcess extends Resource {
      * @param id The id of the DataProcess resource to delete
      * @return DataProcessDeleter capable of executing the delete
      */
+
+    /**
+     * Create a DataProcessReader to get list of available dataprocesses.
+     *
+     * @return DataProcessReader capable of executing the read
+     */
+    public static DataProcessReader reader() {
+        return new DataProcessReader();
+    }
+
     public static DataProcessDeleter deleter(String id) {
         return new DataProcessDeleter(id);
     }

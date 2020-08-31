@@ -19,7 +19,7 @@ public class DictionaryDto {
 
     protected String vocabId;
     protected String vocabName;
-    protected String vocabValueType = "REGEX";
+    protected String vocabValueType;
     protected Extractor.DataType dataType;
     protected List<String> stopwordList;
     protected List<String> synonymList;
@@ -58,12 +58,12 @@ public class DictionaryDto {
         this.synonymList = extractor.getSynonymList();
         this.vocabId = extractor.getDictionary().getId();
         this.vocabName = extractor.getDictionary().getName();
-        if (extractor.getValidator() == null){
-            throw new QTApiException("A validator must be provided for " + this.vocabName);
-        }
 
-        this.phraseMatchingPattern = extractor.getValidator().pattern();
-        this.phraseMatchingGroups = new String [] {"1"};
+        if (extractor.getValidator() != null) {
+            this.phraseMatchingPattern = extractor.getValidator().pattern();
+            this.phraseMatchingGroups = new String[]{"1"};
+            this.vocabValueType = "REGEX";
+        }
 
         if (extractor.getPatternBetweenMultipleValues() != null) {
             this.skipPatternBetweenValues = extractor.getPatternBetweenMultipleValues().pattern();
