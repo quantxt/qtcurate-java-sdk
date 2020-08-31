@@ -36,7 +36,7 @@ public class DataProcessFetcher extends Fetcher<DataProcess> {
 
     @Override
     public DataProcess fetch(QTRestClient client) {
-        Request request = new Request(HttpMethod.GET, "/search/" + this.id);
+        Request request = new Request(HttpMethod.GET, "/search/config/" + this.id);
 
         Response response = client.request(request);
 
@@ -59,9 +59,8 @@ public class DataProcessFetcher extends Fetcher<DataProcess> {
         }
 
         try {
-            QTSearchResponse qtSearchResponse = client.getObjectMapper().readValue(response.getStream(), QTSearchResponse.class);
+            ResultConfiguration resultConfiguration = client.getObjectMapper().readValue(response.getStream(), ResultConfiguration.class);
             DataProcess dataProcess = new DataProcess();
-            ResultConfiguration resultConfiguration = qtSearchResponse.getMeta();
             dataProcess.setId(id);
             dataProcess.setDescription(resultConfiguration.getTitle());
             dataProcess.setNumWorkers(resultConfiguration.getNumWorkers());

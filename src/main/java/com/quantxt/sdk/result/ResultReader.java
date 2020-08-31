@@ -12,7 +12,6 @@ import com.quantxt.sdk.model.Extractor;
 import com.quantxt.sdk.model.ExtInterval;
 import com.quantxt.sdk.model.ExtIntervalSimple;
 import com.quantxt.sdk.model.SearchResultDto;
-import com.quantxt.sdk.profile.Profile;
 import com.quantxt.sdk.resource.Reader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,10 +59,10 @@ public class ResultReader extends Reader<Result> {
 
         try {
             // Get the settings first
-            Profile profile = Profile.fetcher().fetch();
-            if (profile.getDataProcesses() == null) return null;
+            List<DataProcess> dataProcesses = DataProcess.reader().read();
+            if (dataProcesses == null) return null;
             DataProcess dataProcess = null;
-            for (DataProcess dp : profile.getDataProcesses()){
+            for (DataProcess dp : dataProcesses){
                 if (dp.getId().equals(id)) {
                     dataProcess = dp;
                     break;
