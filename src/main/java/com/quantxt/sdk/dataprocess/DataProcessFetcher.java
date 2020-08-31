@@ -4,13 +4,18 @@ import com.quantxt.sdk.client.HttpMethod;
 import com.quantxt.sdk.client.QTRestClient;
 import com.quantxt.sdk.client.Request;
 import com.quantxt.sdk.client.Response;
+import com.quantxt.sdk.document.Document;
 import com.quantxt.sdk.exception.QTApiConnectionException;
 import com.quantxt.sdk.exception.QTApiException;
 import com.quantxt.sdk.exception.QTRestException;
+import com.quantxt.sdk.model.*;
 import com.quantxt.sdk.progress.Progress;
 import com.quantxt.sdk.resource.Fetcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.Thread.sleep;
 
@@ -53,7 +58,34 @@ public class DataProcessFetcher extends Fetcher<DataProcess> {
             );
         }
 
-        return DataProcess.fromJson(response.getStream(), "meta", client.getObjectMapper());
+        try {
+            QTSearchResponse qtSearchResponse = client.getObjectMapper().readValue(response.getStream(), QTSearchResponse.class);
+            DataProcess dataProcess = new DataProcess();
+            ResultConfiguration resultConfiguration = qtSearchResponse.getMeta();
+            dataProcess.setId(id);
+            dataProcess.setDescription(resultConfiguration.getTitle());
+            dataProcess.setNumWorkers(resultConfiguration.getNumWorkers());
+            List<Document> documentList = new ArrayList<>();
+            if (resultConfiguration.getFiles() != null){
+                for (String file : resultConfiguration.getFiles()){
+                    Document document = new Document();
+                    document.setId(file);
+                }
+                dataProcess.setDocuments(documentList);
+            }
+            List<Extractor> extractors = new ArrayList<>();
+            if (resultConfiguration.getSearchDictionaries() != null){
+                for (DictionaryDto dictionaryDto : resultConfiguration.getSearchDictionaries()){
+                    Extractor extractor = new Extractor(dictionaryDto);
+                    extractors.add(extractor);
+                }
+                dataProcess.setExtractors(extractors);
+            }
+            return dataProcess;
+
+        } catch (Exception e){
+            throw new QTApiException("Error is submitting data process job");
+        }
     }
 
     public void blockUntilFinish() {

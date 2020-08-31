@@ -58,11 +58,11 @@ public class DictionaryDto {
         this.synonymList = extractor.getSynonymList();
         this.vocabId = extractor.getDictionary().getId();
         this.vocabName = extractor.getDictionary().getName();
-        if (extractor.getExtractionPattern() == null){
-            throw new QTApiException("A valid regular expression must be provided for " + this.vocabName);
+        if (extractor.getValidator() == null){
+            throw new QTApiException("A validator must be provided for " + this.vocabName);
         }
 
-        this.phraseMatchingPattern = extractor.getExtractionPattern().pattern();
+        this.phraseMatchingPattern = extractor.getValidator().pattern();
         this.phraseMatchingGroups = new String [] {"1"};
 
         if (extractor.getPatternBetweenMultipleValues() != null) {

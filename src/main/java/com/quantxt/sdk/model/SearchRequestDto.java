@@ -4,7 +4,7 @@ import java.util.List;
 
 public class SearchRequestDto {
 
-    private String query;
+    private String id;
     private String title;
     private List<DictionaryDto> searchDictionaries;
     private Integer numWorkers;
@@ -13,14 +13,6 @@ public class SearchRequestDto {
     private String chunk = "PAGE";
 
     public SearchRequestDto() {
-    }
-
-    public String getQuery() {
-        return query;
-    }
-
-    public void setQuery(String query) {
-        this.query = query;
     }
 
     public String getTitle() {
@@ -69,5 +61,13 @@ public class SearchRequestDto {
 
     public void setChunk(String chunk) {
         this.chunk = chunk;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

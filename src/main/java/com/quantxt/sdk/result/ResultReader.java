@@ -88,8 +88,8 @@ public class ResultReader extends Reader<Result> {
                 Result result = new Result();
                 if (srd.getValues() == null) continue;
                 result.setId(srd.getSearchId());
-                result.setSegment(srd.getPosition());
-                result.setSourceName(srd.getSource());
+                result.setUnitNumber(srd.getPosition());
+                result.setDocumentName(srd.getSource());
                 result.setCreationTime(srd.getDate());
                 if (srd.getValues() != null){
                     ExtInterval[] values = srd.getValues();

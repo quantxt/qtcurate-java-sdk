@@ -31,7 +31,7 @@ public class Extractor implements Serializable {
     private Dictionary dictionary;
     private DataType type;
     private Mode mode = Mode.SIMPLE;
-    private Pattern extractionPattern;
+    private Pattern validator;
     private Pattern patternBetweenMultipleValues;
     private List<String> stopwordList;
     private List<String> synonymList;
@@ -56,7 +56,7 @@ public class Extractor implements Serializable {
         this.synonymList = dictionaryDto.getSynonymList();
         this.dictionary = new Dictionary(dictionaryDto.getVocabId(), dictionaryDto.getVocabName(), null);
         if (dictionaryDto.getPhraseMatchingPattern() != null){
-            this.extractionPattern = Pattern.compile(dictionaryDto.getPhraseMatchingPattern());
+            this.validator = Pattern.compile(dictionaryDto.getPhraseMatchingPattern());
         }
 
         if (dictionaryDto.getSkipPatternBetweenValues() != null){
@@ -94,8 +94,8 @@ public class Extractor implements Serializable {
         return patternBetweenMultipleValues;
     }
 
-    public Pattern getExtractionPattern() {
-        return extractionPattern;
+    public Pattern getValidator() {
+        return validator;
     }
 
     public Extractor setDictionary(Dictionary dictionary) {
@@ -119,8 +119,8 @@ public class Extractor implements Serializable {
         return this;
     }
 
-    public Extractor setExtractionPattern(Pattern extractionPattern) {
-        this.extractionPattern = extractionPattern;
+    public Extractor setValidator(Pattern validator) {
+        this.validator = validator;
         return this;
     }
 

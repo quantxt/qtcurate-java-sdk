@@ -5,6 +5,7 @@ import com.quantxt.sdk.client.QTRestClient;
 import com.quantxt.sdk.client.Request;
 import com.quantxt.sdk.client.Response;
 import com.quantxt.sdk.dataprocess.DataProcess;
+import com.quantxt.sdk.document.Document;
 import com.quantxt.sdk.exception.QTApiConnectionException;
 import com.quantxt.sdk.exception.QTApiException;
 import com.quantxt.sdk.exception.QTRestException;
@@ -68,7 +69,12 @@ public class ProfileFetcher extends Fetcher<Profile> {
                 ResultConfiguration setting = settings.get(i);
                 DataProcess dataProcess = new DataProcess();
                 dataProcesses[i] = dataProcess;
-                dataProcess.setFiles(setting.getFiles());
+                List<Document> documents = new ArrayList<>();
+                for (String f : setting.getFiles()){
+                    Document document = new Document();
+                    document.setId(f);
+                }
+                dataProcess.setDocuments(documents);
                 dataProcess.setId(setting.getId());
                 dataProcess.setDescription(setting.getTitle());
                 dataProcess.setNumWorkers(setting.getNumWorkers());

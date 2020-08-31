@@ -18,15 +18,13 @@ public class Result extends Resource {
     }
 
     private String id;
-    private String sourceName;
-    private int segment;
+    private String documentName;
+    private int unitNumber;
     private LocalDateTime creationTime;
     Field[] fields;
 
     public Result(){
-
     }
-
 
     public static byte[] toByteArray(InputStream is) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -46,20 +44,12 @@ public class Result extends Resource {
         this.id = id;
     }
 
-    public String getSourceName() {
-        return sourceName;
+    public int getUnitNumber() {
+        return unitNumber;
     }
 
-    public void setSourceName(String sourceName) {
-        this.sourceName = sourceName;
-    }
-
-    public int getSegment() {
-        return segment;
-    }
-
-    public void setSegment(int segment) {
-        this.segment = segment;
+    public void setUnitNumber(int unitNumber) {
+        this.unitNumber = unitNumber;
     }
 
     public Field[] getFields() {
@@ -76,5 +66,13 @@ public class Result extends Resource {
 
     public void setCreationTime(LocalDateTime creationTime) {
         this.creationTime = creationTime;
+    }
+
+    public String getDocumentName() {
+        return documentName;
+    }
+
+    public void setDocumentName(String documentName) {
+        this.documentName = documentName;
     }
 }

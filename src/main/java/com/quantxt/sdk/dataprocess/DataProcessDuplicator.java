@@ -1,32 +1,34 @@
 package com.quantxt.sdk.dataprocess;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.quantxt.sdk.client.HttpMethod;
 import com.quantxt.sdk.client.QTRestClient;
 import com.quantxt.sdk.client.Request;
 import com.quantxt.sdk.client.Response;
+import com.quantxt.sdk.document.Document;
 import com.quantxt.sdk.exception.QTApiConnectionException;
 import com.quantxt.sdk.exception.QTApiException;
 import com.quantxt.sdk.exception.QTRestException;
+import com.quantxt.sdk.model.SearchRequestDto;
+import com.quantxt.sdk.model.UpdateSearchRequestDto;
 import com.quantxt.sdk.resource.Creator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class DataProcessDuplicator extends Creator<DataProcess> {
 
-    @JsonIgnore
     private String id;
-    private List<String> files;
+    private List<Document> documents;
 
     public DataProcessDuplicator(String id){
         this.id = id;
     }
 
-    public DataProcessDuplicator files(List<String> files) {
-        this.files = files;
+    public DataProcessDuplicator withDocuments(List<Document> documents) {
+        this.documents = documents;
         return this;
     }
 
@@ -60,7 +62,17 @@ public class DataProcessDuplicator extends Creator<DataProcess> {
             );
         }
 
-        return DataProcess.fromJson(response.getStream(), client.getObjectMapper());
+        try {
+            SearchRequestDto searchRequestDto = client.getObjectMapper().readValue(response.getStream(), SearchRequestDto.class);
+            DataProcess dataProcess = new DataProcess();
+            dataProcess.setId(searchRequestDto.getId());
+            dataProcess.setDocuments(documents);
+            return dataProcess;
+
+        } catch (Exception e){
+            throw new QTApiException("Error is submitting data process job");
+        }
+
     }
 
     /**
@@ -69,9 +81,14 @@ public class DataProcessDuplicator extends Creator<DataProcess> {
      * @param request Request to add post params to
      */
     private void addPayload(final Request request, final QTRestClient client) {
-        if (files == null) return;
+        if (documents == null) return;
         try {
-            String requestBody = client.getObjectMapper().writeValueAsString(this);
+            UpdateSearchRequestDto updateSearchRequestDto = new UpdateSearchRequestDto();
+            List<String> uuids = new ArrayList<>();
+            for (Document document : documents){
+                uuids.add(document.getId());
+            }
+            String requestBody = client.getObjectMapper().writeValueAsString(updateSearchRequestDto);
             if (requestBody != null && !requestBody.isEmpty()) {
                 request.setBody(client.getObjectMapper().writeValueAsString(this));
             }
