@@ -14,6 +14,7 @@ import static com.quantxt.sdk.model.DictionaryDto.SearchMode.*;
 public class Extractor implements Serializable {
 
     public enum DataType {
+        KEYWORD,
         STRING,
         LONG,
         DOUBLE,
