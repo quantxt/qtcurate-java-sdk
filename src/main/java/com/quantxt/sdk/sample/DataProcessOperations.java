@@ -42,7 +42,8 @@ public class DataProcessOperations {
 
     public static void main(String[] args) throws IOException {
         QT.init(API_KEY);
-
+        
+        // https://github.com/quantxt/qtcurate-java-sdk/blob/master/src/main/resources/search-file.pdf
         File file = new File(DataProcessOperations.class
                 .getClassLoader().getResource("search-file.pdf").getFile());
 
@@ -69,7 +70,7 @@ public class DataProcessOperations {
         // 3- Track the progress of the parser job
         DataProcess.fetcher(dataProcess.getId()).blockUntilFinish();
 
-        // 4- Export as Excel
+        // 4- Export results as a Excel spreadsheet
         byte[] xlsxExportData = Result.xlsxExporter(dataProcess.getId())
                 .export();
 
@@ -78,7 +79,7 @@ public class DataProcessOperations {
         outStream.write(xlsxExportData);
         System.out.println(String.format("Exported %s bytes of XLSX data", xlsxExportData.length));
 
-        // 5- export results in json
+        // 5- Export results in json
         List<Result> results = Result.reader(dataProcess.getId())
                 .read();
 
