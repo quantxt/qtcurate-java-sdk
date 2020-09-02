@@ -7,8 +7,9 @@ import com.quantxt.sdk.client.QT;
 import com.quantxt.sdk.dataprocess.DataProcess;
 import com.quantxt.sdk.dictionary.Dictionary;
 import com.quantxt.sdk.dictionary.DictionaryEntry;
+import com.quantxt.sdk.document.Document;
 import com.quantxt.sdk.model.Extractor;
-import com.quantxt.sdk.file.SearchDocument;
+import com.quantxt.sdk.result.Field;
 import com.quantxt.sdk.result.Result;
 
 import java.io.File;
@@ -45,12 +46,12 @@ public class DataProcessOperations {
         File file = new File(DataProcessOperations.class
                 .getClassLoader().getResource("search-file.pdf").getFile());
 
-        SearchDocument searchDocument = SearchDocument.creator()
+        Document document = Document.creator()
                 .source(file)
                 .create();
 
-        List<String> documentUUids = new ArrayList<>();
-        documentUUids.add(searchDocument.getUuid());
+        List<Document> documents = new ArrayList<>();
+        documents.add(document);
 
         Dictionary dictionary = getDictionary();
 
@@ -58,9 +59,9 @@ public class DataProcessOperations {
         DataProcess dataProcess = DataProcess.creator("My parser job " + Instant.now())
                 .addExtractor(new Extractor()
                         .setDictionary(dictionary)
-                        .setExtractionPattern(Pattern.compile("^ +(\\d[\\d\\.\\,]+\\d)"))
+                        .setValidator(Pattern.compile("^ +(\\d[\\d\\.\\,]+\\d)"))
                         .setDataType(DOUBLE))
-                .withFiles(documentUUids)
+                .withDocuments(documents)
                 .create();
 
         System.out.println(String.format("Data parser %s started", dataProcess.getId()));
@@ -81,6 +82,11 @@ public class DataProcessOperations {
         List<Result> results = Result.reader(dataProcess.getId())
                 .read();
 
+        for (Result r : results){
+            for (Field f : r.getFields()){
+                System.out.println(f.getDictId() + " " + f.getStr());
+            }
+        }
         ObjectMapper objectMapper = new ObjectMapper()
                 .registerModule(new JavaTimeModule())
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

@@ -1,19 +1,12 @@
 package com.quantxt.sdk.dataprocess;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.quantxt.sdk.exception.QTApiConnectionException;
-import com.quantxt.sdk.exception.QTApiException;
+import com.quantxt.sdk.dictionary.DictionaryReader;
+import com.quantxt.sdk.document.Document;
 import com.quantxt.sdk.model.Extractor;
 import com.quantxt.sdk.resource.Resource;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -24,7 +17,7 @@ public class DataProcess extends Resource {
     private String id;
     private String description;
     private List<Extractor> extractors;
-    private List<String> files;
+    private List<Document> documents;
     private Integer numWorkers = 8;
 
     /**
@@ -34,33 +27,6 @@ public class DataProcess extends Resource {
      */
     public static DataProcessCreator creator(String description) {
         return new DataProcessCreator(description);
-    }
-
-    /**
-     * Create a DataProcessUpdater to execute update.
-     * @param id The name of the search to be updated
-     * @return DataProcessUpdater capable of executing the update
-     */
-    public static DataProcessUpdater updater(String id) {
-        return new DataProcessUpdater(id);
-    }
-
-    /**
-     * Create a DataProcessDuplicator from an existing id
-     * @param id The name of the existing search id
-     * @return DataProcessDuplicator capable of executing the update
-     */
-    public static DataProcessDuplicator duplicator(String id) {
-        return new DataProcessDuplicator(id);
-    }
-
-    /**
-     * Create a DataProcessReader to execute read.
-     *
-     * @return DataProcessReader capable of executing the read
-     */
-    public static DataProcessReader reader() {
-        return new DataProcessReader();
     }
 
     /**
@@ -79,68 +45,23 @@ public class DataProcess extends Resource {
      * @param id The id of the DataProcess resource to delete
      * @return DataProcessDeleter capable of executing the delete
      */
+
+    /**
+     * Create a DataProcessReader to get list of available dataprocesses.
+     *
+     * @return DataProcessReader capable of executing the read
+     */
+    public static DataProcessReader reader() {
+        return new DataProcessReader();
+    }
+
     public static DataProcessDeleter deleter(String id) {
         return new DataProcessDeleter(id);
     }
 
-    /**
-     * Converts a JSON InputStream into a DataProcess object using the provided ObjectMapper.
-     *
-     * @param json         Raw JSON InputStream
-     * @param objectMapper Jackson ObjectMapper
-     * @return DataProcess object represented by the provided JSON
-     */
-    public static DataProcess fromJson(final InputStream json, final ObjectMapper objectMapper) {
-        try {
-            return objectMapper.readValue(json, DataProcess.class);
-        } catch (final JsonMappingException | JsonParseException e) {
-            throw new QTApiException(e.getMessage(), e);
-        } catch (final IOException e) {
-            throw new QTApiConnectionException(e.getMessage(), e);
-        }
-    }
-
-    /**
-     * Converts a JSON InputStream from element into a DataProcess object using the provided ObjectMapper.
-     *
-     * @param json         Raw JSON InputStream
-     * @param path         Path to element
-     * @param objectMapper Jackson ObjectMapper
-     * @return DataProcess object represented by the provided JSON
-     */
-    public static DataProcess fromJson(final InputStream json, final String path, final ObjectMapper objectMapper) {
-        try {
-            JsonNode jsonNode = objectMapper.readValue(json, JsonNode.class);
-            JsonNode metaNode = jsonNode.get(path);
-
-            return objectMapper.treeToValue(metaNode, DataProcess.class);
-        } catch (final JsonMappingException | JsonParseException e) {
-            throw new QTApiException(e.getMessage(), e);
-        } catch (final IOException e) {
-            throw new QTApiConnectionException(e.getMessage(), e);
-        }
-    }
-
-    /**
-     * Converts a JSON InputStream into a list of DataProcess objects using the provided ObjectMapper.
-     *
-     * @param json         Raw JSON InputStream
-     * @param objectMapper Jackson ObjectMapper
-     * @return List of DataProcess objects represented by the provided JSON
-     */
-    public static List<DataProcess> listFromJson(final InputStream json, final ObjectMapper objectMapper) {
-        try {
-            return Arrays.asList(objectMapper.readValue(json, DataProcess[].class));
-        } catch (final JsonMappingException | JsonParseException e) {
-            throw new QTApiException(e.getMessage(), e);
-        } catch (final IOException e) {
-            throw new QTApiConnectionException(e.getMessage(), e);
-        }
-    }
-
     public DataProcess() {
         this.extractors = new ArrayList<>();
-        this.files = new ArrayList<>();
+        this.documents = new ArrayList<>();
     }
 
     public Integer getNumWorkers() {
@@ -167,8 +88,8 @@ public class DataProcess extends Resource {
         this.extractors = extractors;
     }
 
-    public void setFiles(List<String> files) {
-        this.files = files;
+    public void setDocuments(List<Document> documents) {
+        this.documents = documents;
     }
 
     /**
@@ -190,12 +111,12 @@ public class DataProcess extends Resource {
     }
 
     /**
-     * Returns list of file uuids processed.
+     * Returns list of Documents
      *
      * @return files.
      */
-    public List<String> getFiles() {
-        return files;
+    public List<Document> getDocuments() {
+        return documents;
     }
 
     @Override
@@ -204,7 +125,7 @@ public class DataProcess extends Resource {
                 "id='" + id + '\'' +
                 ", description='" + description + '\'' +
                 ", extractors=" + extractors +
-                ", files=" + files +
+                ", documents=" + documents +
                 '}';
     }
 }

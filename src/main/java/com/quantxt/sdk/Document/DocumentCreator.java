@@ -1,4 +1,4 @@
-package com.quantxt.sdk.file;
+package com.quantxt.sdk.document;
 
 import com.quantxt.sdk.client.HttpMethod;
 import com.quantxt.sdk.client.QTRestClient;
@@ -14,31 +14,31 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-public class SearchDocumentCreator extends Creator<SearchDocument> {
+public class DocumentCreator extends Creator<Document> {
 
     private String name;
     private InputStream inputStream;
 
     /**
-     * The inputStream of the search file.
+     * The inputStream of the file.
      *
-     * @param inputStream Search file inputStream.
-     * @param name        Search file name.
+     * @param inputStream input file inputStream.
+     * @param name        input file name.
      * @return this
      */
-    public SearchDocumentCreator source(InputStream inputStream, String name) {
+    public DocumentCreator source(InputStream inputStream, String name) {
         this.inputStream = inputStream;
         this.name = name;
         return this;
     }
 
     /**
-     * Specifies a file as a search document input.
+     * Specifies a file as a input document input.
      *
-     * @param file Search document file.
+     * @param file input document file.
      * @return this
      */
-    public SearchDocumentCreator source(File file) {
+    public DocumentCreator source(File file) {
         try {
             this.inputStream = new FileInputStream(file);
             this.name = file.getName();
@@ -56,7 +56,7 @@ public class SearchDocumentCreator extends Creator<SearchDocument> {
      * @return Created Dictionary
      */
     @Override
-    public SearchDocument create(QTRestClient client) {
+    public Document create(QTRestClient client) {
         Request request = new Request(HttpMethod.UPLOAD, "/search/file");
         addPayload(request);
 
@@ -78,7 +78,7 @@ public class SearchDocumentCreator extends Creator<SearchDocument> {
             );
         }
 
-        return SearchDocument.fromJson(response.getStream(), client.getObjectMapper());
+        return Document.fromJson(response.getStream(), client.getObjectMapper());
     }
 
     private void addPayload(Request request) {

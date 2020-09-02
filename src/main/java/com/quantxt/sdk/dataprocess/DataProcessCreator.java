@@ -6,6 +6,7 @@ import com.quantxt.sdk.client.HttpMethod;
 import com.quantxt.sdk.client.QTRestClient;
 import com.quantxt.sdk.client.Request;
 import com.quantxt.sdk.client.Response;
+import com.quantxt.sdk.document.Document;
 import com.quantxt.sdk.exception.QTApiConnectionException;
 import com.quantxt.sdk.exception.QTApiException;
 import com.quantxt.sdk.exception.QTRestException;
@@ -32,8 +33,8 @@ public class DataProcessCreator extends Creator<DataProcess> {
         return this;
     }
 
-    public DataProcessCreator withFiles(List<String> files) {
-        this.dataProcess.setFiles(files);
+    public DataProcessCreator withDocuments(List<Document> documents) {
+        this.dataProcess.setDocuments(documents);
         return this;
     }
 
@@ -43,6 +44,7 @@ public class DataProcessCreator extends Creator<DataProcess> {
      * @param extractor Extractor to parse text.
      * @return this
      */
+
     public DataProcessCreator addExtractor(Extractor extractor) {
         this.dataProcess.getExtractors().add(extractor);
         return this;
@@ -88,7 +90,15 @@ public class DataProcessCreator extends Creator<DataProcess> {
             );
         }
 
-        return DataProcess.fromJson(response.getStream(), client.getObjectMapper());
+        try {
+            SearchRequestDto searchRequestDto = client.getObjectMapper().readValue(response.getStream(), SearchRequestDto.class);
+            dataProcess.setId(searchRequestDto.getId());
+
+            return dataProcess;
+
+        } catch (Exception e){
+            throw new QTApiException("Error is submitting data process job");
+        }
     }
 
     /**
@@ -100,7 +110,11 @@ public class DataProcessCreator extends Creator<DataProcess> {
         try {
             // convert to SearchRequestDto
             SearchRequestDto searchRequestDto = new SearchRequestDto();
-            searchRequestDto.setFiles(dataProcess.getFiles());
+            List<String> files = new ArrayList<>();
+            for (Document document : dataProcess.getDocuments()){
+                files.add(document.getId());
+            }
+            searchRequestDto.setFiles(files);
             searchRequestDto.setNumWorkers(dataProcess.getNumWorkers());
             searchRequestDto.setTitle(dataProcess.getDescription());
             // convert dictionaries
