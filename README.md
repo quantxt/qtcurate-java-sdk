@@ -32,13 +32,13 @@ Add this dependency to your project's POM:
 <dependency>
   <groupId>com.quantxt.sdk</groupId>
   <artifactId>qtcurate</artifactId>
-  <version>2.2.0</version>
+  <version>2.3.0</version>
 </dependency>
 ```
 
 [quantxt]: http://quantxt.com
 
-Look at the [Samples](src/main/java/com/quantxt/sdk/sample) for end to end examples
+Look at the [Samples](src/main/java/com/quantxt/sdk/sample) for examples
 
 Contact us at <support@quantxt.com> for API key or technical questions.
 
