@@ -69,7 +69,7 @@ public class DataProcessOperations {
         // 3- Track the progress of the parser job
         DataProcess.fetcher(dataProcess.getId()).blockUntilFinish();
 
-        // 4- export extraction results
+        // 4- Print extraction results
         List<Result> results = Result.reader(dataProcess.getId())
                 .read();
 
@@ -79,7 +79,7 @@ public class DataProcessOperations {
             }
         }
 
-        // 5- clean up
+        // 5- Clean up
         boolean dataDeleted = DataProcess.deleter(dataProcess.getId()).delete();
         boolean dictionaryDeleted = Vocabulary.deleter(vocabulary.getId()).delete();
 
