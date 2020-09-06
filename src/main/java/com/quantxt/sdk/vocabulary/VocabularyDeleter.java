@@ -1,4 +1,4 @@
-package com.quantxt.sdk.dictionary;
+package com.quantxt.sdk.vocabulary;
 
 import com.quantxt.sdk.client.HttpMethod;
 import com.quantxt.sdk.client.QTRestClient;
@@ -7,35 +7,29 @@ import com.quantxt.sdk.client.Response;
 import com.quantxt.sdk.exception.QTApiConnectionException;
 import com.quantxt.sdk.exception.QTApiException;
 import com.quantxt.sdk.exception.QTRestException;
-import com.quantxt.sdk.resource.Fetcher;
+import com.quantxt.sdk.resource.Deleter;
 
-public class DictionaryFetcher extends Fetcher<Dictionary> {
+public class VocabularyDeleter extends Deleter<Vocabulary> {
 
-    private String id;
+    private final String id;
 
     /**
-     * Construct a new DictionaryFetcher.
+     * Construct a new VocabularyDeleter.
      *
-     * @param id The ID that identifies the resource to fetch
+     * @param id The ID of the dictionary resource to delete
      */
-    public DictionaryFetcher(String id) {
+    public VocabularyDeleter(String id) {
         this.id = id;
     }
 
-    /**
-     * Make the request to the Quantxt API to perform the fetch.
-     *
-     * @param client QTClient with which to make the request
-     * @return Created Dictionary
-     */
     @Override
-    public Dictionary fetch(QTRestClient client) {
-        Request request = new Request(HttpMethod.GET, "/dictionaries/" + this.id);
+    public boolean delete(QTRestClient client) {
+        Request request = new Request(HttpMethod.DELETE, "/dictionaries/" + id);
 
         Response response = client.request(request);
 
         if (response == null) {
-            throw new QTApiConnectionException("Dictionary fetch failed: Unable to connect to server");
+            throw new QTApiConnectionException("Vocabulary delete failed: Unable to connect to server");
         } else if (!QTRestClient.SUCCESS.test(response.getStatusCode())) {
             QTRestException restException = QTRestException.fromJson(response.getStream(), client.getObjectMapper());
             if (restException == null) {
@@ -50,6 +44,6 @@ public class DictionaryFetcher extends Fetcher<Dictionary> {
             );
         }
 
-        return Dictionary.fromJson(response.getStream(), client.getObjectMapper());
+        return response.getStatusCode() == 204;
     }
 }

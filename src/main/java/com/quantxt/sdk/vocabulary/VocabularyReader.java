@@ -1,4 +1,4 @@
-package com.quantxt.sdk.dictionary;
+package com.quantxt.sdk.vocabulary;
 
 import com.quantxt.sdk.client.HttpMethod;
 import com.quantxt.sdk.client.QTRestClient;
@@ -7,29 +7,34 @@ import com.quantxt.sdk.client.Response;
 import com.quantxt.sdk.exception.QTApiConnectionException;
 import com.quantxt.sdk.exception.QTApiException;
 import com.quantxt.sdk.exception.QTRestException;
-import com.quantxt.sdk.resource.Deleter;
+import com.quantxt.sdk.resource.Reader;
 
-public class DictionaryDeleter extends Deleter<Dictionary> {
+import java.util.List;
 
-    private final String id;
+public class VocabularyReader extends Reader<Vocabulary> {
 
     /**
-     * Construct a new DictionaryDeleter.
-     *
-     * @param id The ID of the dictionary resource to delete
+     * Construct a new VocabularyReader.
      */
-    public DictionaryDeleter(String id) {
-        this.id = id;
+
+    public VocabularyReader() {
     }
 
+    /**
+     * Make the request to the Quantxt API to perform the fetch.
+     *
+     * @param client QTClient with which to make the request
+     * @return List of vocabs
+     */
     @Override
-    public boolean delete(QTRestClient client) {
-        Request request = new Request(HttpMethod.DELETE, "/dictionaries/" + id);
+    public List<Vocabulary> read(QTRestClient client) {
+        String uri = "/dictionaries";
+        Request request = new Request(HttpMethod.GET, uri);
 
         Response response = client.request(request);
 
         if (response == null) {
-            throw new QTApiConnectionException("Dictionary delete failed: Unable to connect to server");
+            throw new QTApiConnectionException("Vocabulary read failed: Unable to connect to server");
         } else if (!QTRestClient.SUCCESS.test(response.getStatusCode())) {
             QTRestException restException = QTRestException.fromJson(response.getStream(), client.getObjectMapper());
             if (restException == null) {
@@ -44,6 +49,6 @@ public class DictionaryDeleter extends Deleter<Dictionary> {
             );
         }
 
-        return response.getStatusCode() == 204;
+        return Vocabulary.listFromJson(response.getStream(), client.getObjectMapper());
     }
 }

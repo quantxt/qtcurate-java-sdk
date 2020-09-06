@@ -1,4 +1,4 @@
-package com.quantxt.sdk.dictionary;
+package com.quantxt.sdk.vocabulary;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -16,29 +16,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class DictionaryUpdater extends Updater<Dictionary> {
+public class VocabularyUpdater extends Updater<Vocabulary> {
 
     @JsonIgnore
     private String id;
     private String name;
-    private List<DictionaryEntry> entries = new ArrayList<>();
+    private List<VocabularyEntry> entries = new ArrayList<>();
 
     /**
-     * Construct a new DictionaryUpdater.
+     * Construct a new VocabularyUpdater.
      *
      * @param id The ID that identifies the resource to update
      */
-    public DictionaryUpdater(String id) {
+    public VocabularyUpdater(String id) {
         this.id = id;
     }
 
     /**
      * The name of the vocab.
      *
-     * @param name Dictionary name.
+     * @param name Vocabulary name.
      * @return this
      */
-    public DictionaryUpdater name(String name) {
+    public VocabularyUpdater name(String name) {
         this.name = name;
         return this;
     }
@@ -46,10 +46,10 @@ public class DictionaryUpdater extends Updater<Dictionary> {
     /**
      * Add entries in the vocab.
      *
-     * @param entries List of Dictionary.Entry entries.
+     * @param entries List of Vocabulary.Entry entries.
      * @return this
      */
-    public DictionaryUpdater entries(List<DictionaryEntry> entries) {
+    public VocabularyUpdater entries(List<VocabularyEntry> entries) {
         this.entries = entries;
         return this;
     }
@@ -57,33 +57,33 @@ public class DictionaryUpdater extends Updater<Dictionary> {
     /**
      * Append single entry without category in the vocab.
      *
-     * @param search_string   Dictionary entry key.
+     * @param search_string   Vocabulary entry key.
      * @return this
      */
-    public DictionaryUpdater addEntry(String search_string) {
-        this.entries.add(new DictionaryEntry(search_string, search_string));
+    public VocabularyUpdater addEntry(String search_string) {
+        this.entries.add(new VocabularyEntry(search_string, search_string));
         return this;
     }
 
     /**
      * Append single entry in the vocab.
      *
-     * @param search_string   Dictionary entry key.
-     * @param category Dictionary entry value.
+     * @param search_string   Vocabulary entry key.
+     * @param category Vocabulary entry value.
      * @return this
      */
-    public DictionaryUpdater addEntry(String search_string, String category) {
-        this.entries.add(new DictionaryEntry(category, search_string));
+    public VocabularyUpdater addEntry(String search_string, String category) {
+        this.entries.add(new VocabularyEntry(category, search_string));
         return this;
     }
 
     /**
      * Append single entry in the vocab.
      *
-     * @param entry Dictionary.Entry entry.
+     * @param entry Vocabulary.Entry entry.
      * @return this
      */
-    public DictionaryUpdater addEntry(DictionaryEntry entry) {
+    public VocabularyUpdater addEntry(VocabularyEntry entry) {
         this.entries.add(entry);
         return this;
     }
@@ -92,10 +92,10 @@ public class DictionaryUpdater extends Updater<Dictionary> {
      * Make the request to the API to perform the update.
      *
      * @param client QTClient with which to make the request
-     * @return Updated Dictionary
+     * @return Updated Vocabulary
      */
     @Override
-    public Dictionary update(QTRestClient client) {
+    public Vocabulary update(QTRestClient client) {
         Request request = new Request(HttpMethod.PUT, String.format("/dictionaries/%s", this.id));
 
         addPayload(request, client);
@@ -103,7 +103,7 @@ public class DictionaryUpdater extends Updater<Dictionary> {
         Response response = client.request(request);
 
         if (response == null) {
-            throw new QTApiConnectionException("Dictionary update failed: Unable to connect to server");
+            throw new QTApiConnectionException("Vocabulary update failed: Unable to connect to server");
         } else if (!QTRestClient.SUCCESS.test(response.getStatusCode())) {
             QTRestException restException = QTRestException.fromJson(response.getStream(), client.getObjectMapper());
             if (restException == null) {
@@ -118,7 +118,7 @@ public class DictionaryUpdater extends Updater<Dictionary> {
             );
         }
 
-        return Dictionary.fromJson(response.getStream(), client.getObjectMapper());
+        return Vocabulary.fromJson(response.getStream(), client.getObjectMapper());
     }
 
     /**

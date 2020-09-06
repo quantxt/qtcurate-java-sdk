@@ -1,9 +1,11 @@
-package com.quantxt.sdk.dictionary;
+package com.quantxt.sdk.vocabulary;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quantxt.sdk.client.HttpMethod;
 import com.quantxt.sdk.client.QTRestClient;
 import com.quantxt.sdk.client.Request;
@@ -19,19 +21,22 @@ import java.util.List;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 @JsonInclude(Include.NON_NULL)
-public class DictionaryCreator extends Creator<Dictionary> {
+public class VocabularyCreator extends Creator<Vocabulary> {
+
+    final private static ObjectMapper objectMapper = new ObjectMapper()
+            .configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, true);
 
     private String name;
-    private List<DictionaryEntry> entries = new ArrayList<>();
+    private List<VocabularyEntry> entries = new ArrayList<>();
     private InputStream inputStream;
 
     /**
      * The name of the vocab.
      *
-     * @param name Dictionary name.
+     * @param name Vocabulary name.
      * @return this
      */
-    public DictionaryCreator name(String name) {
+    public VocabularyCreator name(String name) {
         this.name = name;
         return this;
     }
@@ -39,10 +44,10 @@ public class DictionaryCreator extends Creator<Dictionary> {
     /**
      * Entries in the vocab.
      *
-     * @param entries Dictionary entries.
+     * @param entries Vocabulary entries.
      * @return this
      */
-    public DictionaryCreator entries(final List<DictionaryEntry> entries) {
+    public VocabularyCreator entries(final List<VocabularyEntry> entries) {
         this.entries = entries;
         return this;
     }
@@ -54,8 +59,8 @@ public class DictionaryCreator extends Creator<Dictionary> {
      * @return this
      */
 
-    public DictionaryCreator addEntry(String search_string) {
-        this.entries.add(new DictionaryEntry(search_string, search_string));
+    public VocabularyCreator addEntry(String search_string) {
+        this.entries.add(new VocabularyEntry(search_string, search_string));
         return this;
     }
 
@@ -66,18 +71,18 @@ public class DictionaryCreator extends Creator<Dictionary> {
      * @param category        Category.
      * @return this
      */
-    public DictionaryCreator addEntry(String search_string, String category) {
-        this.entries.add(new DictionaryEntry(category, search_string));
+    public VocabularyCreator addEntry(String search_string, String category) {
+        this.entries.add(new VocabularyEntry(category, search_string));
         return this;
     }
 
     /**
      * The inputStream of the vocab source.
      *
-     * @param inputStream Dictionary file inputStream.
+     * @param inputStream Vocabulary file inputStream.
      * @return this
      */
-    public DictionaryCreator source(InputStream inputStream) {
+    public VocabularyCreator source(InputStream inputStream) {
         this.inputStream = inputStream;
         return this;
     }
@@ -86,17 +91,17 @@ public class DictionaryCreator extends Creator<Dictionary> {
      * Make the request to the API to perform the create.
      *
      * @param client QTClient with which to make the request
-     * @return Created Dictionary
+     * @return Created Vocabulary
      */
     @Override
-    public Dictionary create(QTRestClient client) {
+    public Vocabulary create(QTRestClient client) {
         Request request = createRequest();
         addPayload(request, client);
 
         Response response = client.request(request);
 
         if (response == null) {
-            throw new QTApiConnectionException("Dictionary creation failed: Unable to connect to server");
+            throw new QTApiConnectionException("Vocabulary creation failed: Unable to connect to server");
         } else if (!QTRestClient.SUCCESS.test(response.getStatusCode())) {
             QTRestException restException = QTRestException.fromJson(response.getStream(), client.getObjectMapper());
             if (restException == null) {
@@ -111,7 +116,7 @@ public class DictionaryCreator extends Creator<Dictionary> {
             );
         }
 
-        return Dictionary.fromJson(response.getStream(), client.getObjectMapper());
+        return Vocabulary.fromJson(response.getStream(), client.getObjectMapper());
     }
 
     /**
@@ -135,7 +140,8 @@ public class DictionaryCreator extends Creator<Dictionary> {
     private void addPayload(final Request request, final QTRestClient client) {
         if (this.inputStream == null) {
             try {
-                request.setBody(client.getObjectMapper().writeValueAsString(this));
+                String body = objectMapper.writeValueAsString(this);
+                request.setBody(body);
             } catch (JsonProcessingException e) {
                 throw new QTApiException(e.getMessage(), e);
             }

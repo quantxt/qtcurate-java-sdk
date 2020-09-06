@@ -1,7 +1,5 @@
 package com.quantxt.sdk.model;
 
-import com.quantxt.sdk.exception.QTApiException;
-
 import java.util.List;
 
 public class DictionaryDto {
@@ -30,7 +28,7 @@ public class DictionaryDto {
     protected String phraseMatchingPattern;
     protected String[] phraseMatchingGroups;
 
-    public DictionaryDto(Extractor  extractor){
+    public DictionaryDto(Extractor extractor){
         switch (extractor.getMode()) {
             case SIMPLE:
                 this.searchMode = SearchMode.ORDERED_SPAN;
@@ -56,8 +54,8 @@ public class DictionaryDto {
 
         this.stopwordList = extractor.getStopwordList();
         this.synonymList = extractor.getSynonymList();
-        this.vocabId = extractor.getDictionary().getId();
-        this.vocabName = extractor.getDictionary().getName();
+        this.vocabId = extractor.getVocabulary().getId();
+        this.vocabName = extractor.getVocabulary().getName();
 
         if (extractor.getValidator() != null) {
             this.phraseMatchingPattern = extractor.getValidator().pattern();
