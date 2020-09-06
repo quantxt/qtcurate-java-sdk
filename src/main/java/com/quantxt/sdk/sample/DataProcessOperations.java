@@ -69,13 +69,17 @@ public class DataProcessOperations {
         // 3- Track the progress of the parser job
         DataProcess.fetcher(dataProcess.getId()).blockUntilFinish();
 
-        // 4- Print extraction results
-        List<Result> results = Result.reader(dataProcess.getId())
-                .read();
+        /* 4- Print extraction results
 
+        Industrials -> 41.2
+        Quasi-Governments -> 2.7
+        Governments -> 1.6
+
+         */
+        List<Result> results = Result.reader(dataProcess.getId()).read();
         for (Result r : results){
             for (Field f : r.getFields()){
-                System.out.println(f.getDictId() + " " + f.getStr());
+                System.out.println(f.getStr() + " -> " + f.getFieldValues()[0]);
             }
         }
 
