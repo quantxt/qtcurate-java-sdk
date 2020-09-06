@@ -6,8 +6,8 @@ public class Field {
 
     private String str;
     private String category;
-    private String dictName;
-    private String dictId;
+    private String vocabName;
+    private String vocabId;
     private Extractor.DataType type;
     private Object[] fieldValues;
 
@@ -31,20 +31,20 @@ public class Field {
         this.category = category;
     }
 
-    public String getDictName() {
-        return dictName;
+    public String getVocabName() {
+        return vocabName;
     }
 
-    public void setDictName(String dictName) {
-        this.dictName = dictName;
+    public void setVocabName(String vocabName) {
+        this.vocabName = vocabName;
     }
 
-    public String getDictId() {
-        return dictId;
+    public String getVocabId() {
+        return vocabId;
     }
 
-    public void setDictId(String dictId) {
-        this.dictId = dictId;
+    public void setVocabId(String vocabId) {
+        this.vocabId = vocabId;
     }
 
     public Object[] getFieldValues() {

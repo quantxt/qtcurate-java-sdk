@@ -28,7 +28,6 @@ public class ResultReader extends Reader<Result> {
 
     final private static Logger log = LoggerFactory.getLogger(ResultReader.class);
 
-
     private String id;
 
     public ResultReader(String id) {
@@ -98,8 +97,8 @@ public class ResultReader extends Reader<Result> {
                         Field field = new Field();
                         field.setCategory(value.getCategory());
                         field.setStr(value.getStr());
-                        field.setDictId(value.getDict_id());
-                        field.setDictName(value.getDict_name());
+                        field.setVocabId(value.getDict_id());
+                        field.setVocabName(value.getDict_name());
                         Extractor.DataType dataType = dataTypeHashMap.get(value.getDict_id());
                         if (dataType != null){
                             field.setType(dataType);
