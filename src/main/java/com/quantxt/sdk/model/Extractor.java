@@ -1,6 +1,7 @@
 package com.quantxt.sdk.model;
 
-import com.quantxt.sdk.dictionary.Dictionary;
+import com.quantxt.sdk.vocabulary.Vocabulary;
+import com.quantxt.sdk.vocabulary.Vocabulary;
 
 import java.io.Serializable;
 import java.util.List;
@@ -29,7 +30,7 @@ public class Extractor implements Serializable {
         FUZZY_UNORDERED_STEM
     };
 
-    private Dictionary dictionary;
+    private Vocabulary vocabulary;
     private DataType type;
     private Mode mode = Mode.SIMPLE;
     private Pattern validator;
@@ -55,7 +56,7 @@ public class Extractor implements Serializable {
         }
         this.stopwordList = dictionaryDto.getStopwordList();
         this.synonymList = dictionaryDto.getSynonymList();
-        this.dictionary = new Dictionary(dictionaryDto.getVocabId(), dictionaryDto.getVocabName(), null);
+        this.vocabulary = new Vocabulary(dictionaryDto.getVocabId(), dictionaryDto.getVocabName(), null);
         if (dictionaryDto.getPhraseMatchingPattern() != null){
             this.validator = Pattern.compile(dictionaryDto.getPhraseMatchingPattern());
         }
@@ -71,8 +72,8 @@ public class Extractor implements Serializable {
 
     }
 
-    public Dictionary getDictionary() {
-        return dictionary;
+    public Vocabulary getVocabulary() {
+        return vocabulary;
     }
 
     public DataType getType() {
@@ -99,8 +100,8 @@ public class Extractor implements Serializable {
         return validator;
     }
 
-    public Extractor setDictionary(Dictionary dictionary) {
-        this.dictionary = dictionary;
+    public Extractor setVocabulary(Vocabulary vocabulary) {
+        this.vocabulary = vocabulary;
         return this;
     }
 

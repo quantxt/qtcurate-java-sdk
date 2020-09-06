@@ -1,19 +1,19 @@
-package com.quantxt.sdk.dictionary;
+package com.quantxt.sdk.vocabulary;
 
-public class DictionaryEntry {
+public class VocabularyEntry {
 
     private String str;
     private String category;
 
-    public DictionaryEntry(){
+    public VocabularyEntry(){
 
     }
 
-    public DictionaryEntry(final String str) {
+    public VocabularyEntry(final String str) {
         this.str = str;
     }
 
-    public DictionaryEntry(final String category,
+    public VocabularyEntry(final String category,
                            final String str) {
         this.category = category;
         this.str = str;

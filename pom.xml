@@ -6,7 +6,7 @@
 
     <groupId>com.quantxt.sdk</groupId>
     <artifactId>qtcurate</artifactId>
-    <version>2.1.0</version>
+    <version>2.2.0</version>
     <packaging>jar</packaging>
 
     <name>Theia SDK Search and Data Extraction</name>
@@ -70,6 +70,12 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>1.11.699</version>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>

@@ -75,7 +75,7 @@ public class ResultReader extends Reader<Result> {
             HashMap<String, Extractor.DataType> dataTypeHashMap = new HashMap<>();
             for (Extractor extractor : dataProcess.getExtractors()){
                 if (extractor.getType() != null){
-                    dataTypeHashMap.putIfAbsent(extractor.getDictionary().getId(), extractor.getType());
+                    dataTypeHashMap.putIfAbsent(extractor.getVocabulary().getId(), extractor.getType());
                 }
             }
 

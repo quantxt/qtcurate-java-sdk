@@ -1,7 +1,6 @@
 package com.quantxt.sdk.dataprocess;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.quantxt.sdk.dictionary.DictionaryReader;
 import com.quantxt.sdk.document.Document;
 import com.quantxt.sdk.model.Extractor;
 import com.quantxt.sdk.resource.Resource;
