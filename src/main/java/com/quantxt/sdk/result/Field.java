@@ -9,7 +9,8 @@ public class Field {
     private String dictName;
     private String dictId;
     private Extractor.DataType type;
-    private Object[] fieldValues;
+    private Position position;
+    private FieldValue[] fieldValues;
 
     public Field(){
 
@@ -51,15 +52,23 @@ public class Field {
         return fieldValues;
     }
 
-    public void setFieldValues(Object[] fieldValues) {
-        this.fieldValues = fieldValues;
-    }
-
     public Extractor.DataType getType() {
         return type;
     }
 
     public void setType(Extractor.DataType type) {
         this.type = type;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
+    public void setFieldValues(FieldValue[] fieldValues) {
+        this.fieldValues = fieldValues;
     }
 }

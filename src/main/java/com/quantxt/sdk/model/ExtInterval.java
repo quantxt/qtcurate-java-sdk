@@ -1,7 +1,5 @@
 package com.quantxt.sdk.model;
 
-import java.util.ArrayList;
-
 public class ExtInterval {
 
     public int getStart() {
@@ -28,11 +26,17 @@ public class ExtInterval {
         this.str = str;
     }
 
-    private enum ExtractionType {NUMBER, DATETIME, REGEX };
+    public int getLine() {
+        return line;
+    }
+
+    public void setLine(int line) {
+        this.line = line;
+    }
 
     private int start;
     private int end;
-    private ExtractionType type;
+    private int line;
     private String str;
     private String category;
     private String dict_name;
@@ -59,10 +63,6 @@ public class ExtInterval {
         return extIntervalSimples;
     }
 
-    public ExtractionType getType() {
-        return type;
-    }
-
     public void setDict_name(String dict_name) {
         this.dict_name = dict_name;
     }
@@ -77,9 +77,5 @@ public class ExtInterval {
 
     public void setExtIntervalSimples(ExtIntervalSimple[] extIntervalSimples) {
         this.extIntervalSimples = extIntervalSimples;
-    }
-
-    public void setType(ExtractionType type) {
-        this.type = type;
     }
 }
