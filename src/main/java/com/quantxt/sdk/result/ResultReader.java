@@ -95,6 +95,7 @@ public class ResultReader extends Reader<Result> {
                     for (int j=0; j< values.length; j++){
                         ExtInterval value = values[j];
                         Field field = new Field();
+                        Position fieldPosition = new Position();
                         field.setCategory(value.getCategory());
                         field.setStr(value.getStr());
                         field.setVocabId(value.getDict_id());
@@ -103,23 +104,25 @@ public class ResultReader extends Reader<Result> {
                         if (dataType != null){
                             field.setType(dataType);
                         }
+                        fieldPosition.setEnd(value.getEnd());
+                        fieldPosition.setStart(value.getStart());
+                        fieldPosition.setLine(value.getLine());
+                        field.setPosition(fieldPosition);
                         ExtIntervalSimple[] extIntervalSimples = value.getExtIntervalSimples();
 
                         if (extIntervalSimples != null){
-                            Object [] fieldValues = new Object[extIntervalSimples.length];
+                            FieldValue [] fieldValues = new FieldValue[extIntervalSimples.length];
                             for (int k=0 ; k < extIntervalSimples.length; k++){
                                 ExtIntervalSimple extIntervalSimple = extIntervalSimples[k];
+                                Position fieldValuePosition = new Position();
+                                field.setCategory(value.getCategory());
                                 String str = extIntervalSimple.getStr();
                                 str = str.replaceAll("\\s+", " ").trim();
-                                if (dataType == null){
-                                    fieldValues[k] = str;
-                                } else if (dataType == Extractor.DataType.LONG){
-                                    fieldValues[k] = processLongNumber(str);
-                                } else if (dataType == Extractor.DataType.DOUBLE){
-                                    fieldValues[k] = processDoubleNumber(str);
-                                } else {
-                                    fieldValues[k] = str;
-                                }
+                                fieldValuePosition.setStart(extIntervalSimple.getStart());
+                                fieldValuePosition.setEnd(extIntervalSimple.getEnd());
+                                fieldValuePosition.setLine(extIntervalSimple.getLine());
+                                fieldValues[k].setStr(str);
+                                fieldValues[k].setPosition(fieldPosition);
                             }
                             field.setFieldValues(fieldValues);
                         }

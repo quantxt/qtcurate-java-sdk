@@ -6,6 +6,9 @@ public class ExtIntervalSimple {
 
     private Extractor.DataType type;
     private String str;
+    private int start;
+    private int end;
+    private int line;
     private Double doubleValue;
     private Long intValue;
     private LocalDateTime datetimeValue;
@@ -54,4 +57,27 @@ public class ExtIntervalSimple {
 
     }
 
+    public int getStart() {
+        return start;
+    }
+
+    public void setStart(int start) {
+        this.start = start;
+    }
+
+    public int getEnd() {
+        return end;
+    }
+
+    public void setEnd(int end) {
+        this.end = end;
+    }
+
+    public int getLine() {
+        return line;
+    }
+
+    public void setLine(int line) {
+        this.line = line;
+    }
 }
