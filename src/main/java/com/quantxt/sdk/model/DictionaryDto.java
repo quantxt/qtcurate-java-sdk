@@ -29,29 +29,9 @@ public class DictionaryDto {
     protected String[] phraseMatchingGroups;
 
     public DictionaryDto(Extractor extractor){
-        switch (extractor.getMode()) {
-            case SIMPLE:
-                this.searchMode = SearchMode.ORDERED_SPAN;
-                this.analyzeStrategy = AnalyzeMode.SIMPLE;
-                break;
-            case UNORDERED:
-                this.searchMode = SearchMode.SPAN;
-                this.analyzeStrategy = AnalyzeMode.SIMPLE;
-                break;
-            case STEM:
-                this.searchMode = SearchMode.ORDERED_SPAN;
-                this.analyzeStrategy = AnalyzeMode.STEM;
-                break;
-            case UNORDERED_STEM:
-                this.searchMode = SearchMode.SPAN;
-                this.analyzeStrategy = AnalyzeMode.STEM;
-                break;
-            case FUZZY_UNORDERED_STEM:
-                this.searchMode = SearchMode.FUZZY_SPAN;
-                this.analyzeStrategy = AnalyzeMode.STEM;
-                break;
-        }
 
+        this.searchMode = extractor.getSearchMode();
+        this.analyzeStrategy = extractor.getAnalyzeMode();
         this.stopwordList = extractor.getStopwordList();
         this.synonymList = extractor.getSynonymList();
         this.vocabId = extractor.getVocabulary().getId();

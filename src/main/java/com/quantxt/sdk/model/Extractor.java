@@ -1,7 +1,6 @@
 package com.quantxt.sdk.model;
 
 import com.quantxt.sdk.vocabulary.Vocabulary;
-import com.quantxt.sdk.vocabulary.Vocabulary;
 
 import java.io.Serializable;
 import java.util.List;
@@ -27,20 +26,22 @@ public class Extractor implements Serializable {
         UNORDERED,
         STEM,
         UNORDERED_STEM,
-        FUZZY_UNORDERED_STEM
+        FUZZY_UNORDERED_STEM,
     };
 
     private Vocabulary vocabulary;
     private DataType type;
     private Mode mode = Mode.SIMPLE;
+    private DictionaryDto.AnalyzeMode analyzeMode;
+    private DictionaryDto.SearchMode searchMode;
     private Pattern validator;
     private Pattern patternBetweenMultipleValues;
     private List<String> stopwordList;
     private List<String> synonymList;
 
     public Extractor(DictionaryDto  dictionaryDto){
-        DictionaryDto.AnalyzeMode analyzeMode = dictionaryDto.getAnalyzeStrategy();
-        DictionaryDto.SearchMode searchMode = dictionaryDto.getSearchMode();
+        analyzeMode = dictionaryDto.getAnalyzeStrategy();
+        searchMode = dictionaryDto.getSearchMode();
         if (analyzeMode == SIMPLE && searchMode == ORDERED_SPAN){
             this.mode = Mode.SIMPLE;
         } else if (analyzeMode == SIMPLE && searchMode == SPAN){
@@ -52,8 +53,9 @@ public class Extractor implements Serializable {
         } else if (analyzeMode == STEM && searchMode == FUZZY_SPAN){
             this.mode = FUZZY_UNORDERED_STEM;
         } else {
-            this.mode = Mode.SIMPLE;
+            this.mode = null;
         }
+
         this.stopwordList = dictionaryDto.getStopwordList();
         this.synonymList = dictionaryDto.getSynonymList();
         this.vocabulary = new Vocabulary(dictionaryDto.getVocabId(), dictionaryDto.getVocabName(), null);
@@ -134,4 +136,25 @@ public class Extractor implements Serializable {
     public void setMode(Mode mode) {
         this.mode = mode;
     }
+
+    public void setType(DataType type) {
+        this.type = type;
+    }
+
+    public DictionaryDto.AnalyzeMode getAnalyzeMode() {
+        return analyzeMode;
+    }
+
+    public void setAnalyzeMode(DictionaryDto.AnalyzeMode analyzeMode) {
+        this.analyzeMode = analyzeMode;
+    }
+
+    public DictionaryDto.SearchMode getSearchMode() {
+        return searchMode;
+    }
+
+    public void setSearchMode(DictionaryDto.SearchMode searchMode) {
+        this.searchMode = searchMode;
+    }
+
 }
