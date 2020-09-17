@@ -135,6 +135,28 @@ public class Extractor implements Serializable {
 
     public void setMode(Mode mode) {
         this.mode = mode;
+        switch (mode) {
+            case SIMPLE:
+                analyzeMode = SIMPLE;
+                searchMode = ORDERED_SPAN;
+                break;
+            case UNORDERED:
+                analyzeMode = SIMPLE;
+                searchMode = SPAN;
+                break;
+            case STEM:
+                analyzeMode = STEM;
+                searchMode = ORDERED_SPAN;
+                break;
+            case UNORDERED_STEM:
+                analyzeMode = STEM;
+                searchMode = SPAN;
+                break;
+            case FUZZY_UNORDERED_STEM:
+                analyzeMode = STEM;
+                searchMode = FUZZY_SPAN;
+                break;
+        }
     }
 
     public void setType(DataType type) {
