@@ -121,6 +121,7 @@ public class ResultReader extends Reader<Result> {
                                 fieldValuePosition.setStart(extIntervalSimple.getStart());
                                 fieldValuePosition.setEnd(extIntervalSimple.getEnd());
                                 fieldValuePosition.setLine(extIntervalSimple.getLine());
+                                fieldValues[k] = new FieldValue();
                                 fieldValues[k].setStr(str);
                                 fieldValues[k].setPosition(fieldPosition);
                             }

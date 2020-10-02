@@ -48,7 +48,7 @@ public class Field {
         this.vocabId = vocabId;
     }
 
-    public Object[] getFieldValues() {
+    public FieldValue[] getFieldValues() {
         return fieldValues;
     }
 
