@@ -1,4 +1,4 @@
-package com.quantxt.sdk.dataprocess;
+package com.quantxt.sdk.extraction;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -19,22 +19,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class DataProcessCreator extends Creator<DataProcess> {
+public class ModelCreator extends Creator<Model> {
 
-    private DataProcess dataProcess;
+    private Model model;
 
-    public DataProcessCreator(String description){
-        dataProcess = new DataProcess();
-        dataProcess.setDescription(description);
+    public ModelCreator(String description){
+        model = new Model();
+        model.setDescription(description);
     }
 
-    public DataProcessCreator withNumWorkers(Integer numWorkers) {
-        this.dataProcess.setNumWorkers(numWorkers);
+    public ModelCreator withNumWorkers(Integer numWorkers) {
+        this.model.setNumWorkers(numWorkers);
         return this;
     }
 
-    public DataProcessCreator withDocuments(List<Document> documents) {
-        this.dataProcess.setDocuments(documents);
+    public ModelCreator withDocuments(List<Document> documents) {
+        this.model.setDocuments(documents);
         return this;
     }
 
@@ -45,8 +45,8 @@ public class DataProcessCreator extends Creator<DataProcess> {
      * @return this
      */
 
-    public DataProcessCreator addExtractor(Extractor extractor) {
-        this.dataProcess.getExtractors().add(extractor);
+    public ModelCreator addExtractor(Extractor extractor) {
+        this.model.getExtractors().add(extractor);
         return this;
     }
 
@@ -56,8 +56,8 @@ public class DataProcessCreator extends Creator<DataProcess> {
      * @param extractors list of extractors
      * @return this
      */
-    public DataProcessCreator withExtractors(List<Extractor> extractors) {
-        this.dataProcess.setExtractors(extractors);
+    public ModelCreator withExtractors(List<Extractor> extractors) {
+        this.model.setExtractors(extractors);
         return this;
     }
 
@@ -65,17 +65,17 @@ public class DataProcessCreator extends Creator<DataProcess> {
      * Make the request to the API to perform the create.
      *
      * @param client QTClient with which to make the request
-     * @return Created DataProcess
+     * @return Created Model
      */
     @Override
-    public DataProcess create(QTRestClient client) {
+    public Model create(QTRestClient client) {
         Request request = new Request(HttpMethod.POST, "/search/new");
         addPayload(request, client);
 
         Response response = client.request(request);
 
         if (response == null) {
-            throw new QTApiConnectionException("DataProcess creation failed: Unable to connect to server");
+            throw new QTApiConnectionException("Model creation failed: Unable to connect to server");
         } else if (!QTRestClient.SUCCESS.test(response.getStatusCode())) {
             QTRestException restException = QTRestException.fromJson(response.getStream(), client.getObjectMapper());
             if (restException == null) {
@@ -92,9 +92,9 @@ public class DataProcessCreator extends Creator<DataProcess> {
 
         try {
             SearchRequestDto searchRequestDto = client.getObjectMapper().readValue(response.getStream(), SearchRequestDto.class);
-            dataProcess.setId(searchRequestDto.getId());
+            model.setId(searchRequestDto.getId());
 
-            return dataProcess;
+            return model;
 
         } catch (Exception e){
             throw new QTApiException("Error is submitting data process job");
@@ -111,15 +111,15 @@ public class DataProcessCreator extends Creator<DataProcess> {
             // convert to SearchRequestDto
             SearchRequestDto searchRequestDto = new SearchRequestDto();
             List<String> files = new ArrayList<>();
-            for (Document document : dataProcess.getDocuments()){
+            for (Document document : model.getDocuments()){
                 files.add(document.getId());
             }
             searchRequestDto.setFiles(files);
-            searchRequestDto.setNumWorkers(dataProcess.getNumWorkers());
-            searchRequestDto.setTitle(dataProcess.getDescription());
+            searchRequestDto.setNumWorkers(model.getNumWorkers());
+            searchRequestDto.setTitle(model.getDescription());
             // convert dictionaries
             List<DictionaryDto> dictionaryDtos = new ArrayList<>();
-            for (Extractor extractor : dataProcess.getExtractors()){
+            for (Extractor extractor : model.getExtractors()){
                 DictionaryDto dictionaryDto = new DictionaryDto(extractor);
                 dictionaryDtos.add(dictionaryDto);
             }

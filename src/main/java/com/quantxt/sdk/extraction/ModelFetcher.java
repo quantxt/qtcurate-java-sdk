@@ -1,4 +1,4 @@
-package com.quantxt.sdk.dataprocess;
+package com.quantxt.sdk.extraction;
 
 import com.quantxt.sdk.client.HttpMethod;
 import com.quantxt.sdk.client.QTRestClient;
@@ -19,29 +19,29 @@ import java.util.List;
 
 import static java.lang.Thread.sleep;
 
-public class DataProcessFetcher extends Fetcher<DataProcess> {
+public class ModelFetcher extends Fetcher<Model> {
 
-    final private static Logger log = LoggerFactory.getLogger(DataProcessFetcher.class);
+    final private static Logger log = LoggerFactory.getLogger(ModelFetcher.class);
 
     private String id;
 
     /**
-     * Construct a new {@link DataProcessFetcher}.
+     * Construct a new {@link ModelFetcher}.
      *
      * @param id The ID that identifies the resource to fetch
      */
-    public DataProcessFetcher(String id) {
+    public ModelFetcher(String id) {
         this.id = id;
     }
 
     @Override
-    public DataProcess fetch(QTRestClient client) {
+    public Model fetch(QTRestClient client) {
         Request request = new Request(HttpMethod.GET, "/search/config/" + this.id);
 
         Response response = client.request(request);
 
         if (response == null) {
-            throw new QTApiConnectionException("DataProcess fetch failed: Unable to connect to server");
+            throw new QTApiConnectionException("Model fetch failed: Unable to connect to server");
         } else if (response.getStream() == null) {
             throw new QTApiException("Server Error, no content");
         } else if (!QTRestClient.SUCCESS.test(response.getStatusCode())) {
@@ -60,7 +60,7 @@ public class DataProcessFetcher extends Fetcher<DataProcess> {
 
         try {
             ResultConfiguration resultConfiguration = client.getObjectMapper().readValue(response.getStream(), ResultConfiguration.class);
-            DataProcess dataProcess = new DataProcess();
+            Model dataProcess = new Model();
             dataProcess.setId(id);
             dataProcess.setDescription(resultConfiguration.getTitle());
             dataProcess.setNumWorkers(resultConfiguration.getNumWorkers());

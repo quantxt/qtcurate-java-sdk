@@ -1,7 +1,7 @@
 package com.quantxt.sdk.sample;
 
 import com.quantxt.sdk.client.QT;
-import com.quantxt.sdk.dataprocess.DataProcess;
+import com.quantxt.sdk.extraction.Model;
 import com.quantxt.sdk.vocabulary.Vocabulary;
 import com.quantxt.sdk.vocabulary.VocabularyEntry;
 import com.quantxt.sdk.document.Document;
@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 import static com.quantxt.sdk.model.Extractor.DataType.DOUBLE;
 
 
-public class DataProcessOperations {
+public class ModelOperations {
     private static final String API_KEY = "__APIKEY__";
 
     private static Vocabulary getVocabulary() {
@@ -40,7 +40,7 @@ public class DataProcessOperations {
 
         // procee a one page file and extract numbers reported in the table
         // https://github.com/quantxt/qtcurate-java-sdk/tree/master/src/main/resources/sample.pdf
-        File file = new File(DataProcessOperations.class
+        File file = new File(ModelOperations.class
                 .getClassLoader().getResource("sample.pdf").getFile());
 
         Document document = Document.creator()
@@ -56,7 +56,7 @@ public class DataProcessOperations {
         // search for entries in the vocabulary and find a value near matches that pass
         // the validator regular expression: ^ +(\d[\d\.\,]+\d)
         // Validator must have one capturing group
-        DataProcess dataProcess = DataProcess.creator("My parser job " + Instant.now())
+        Model model = Model.creator("My parser job " + Instant.now())
                 .addExtractor(new Extractor()
                 .setVocabulary(vocabulary)
                 .setValidator(Pattern.compile("^ +(\\d[\\d\\.\\,]+\\d)"))
@@ -64,10 +64,10 @@ public class DataProcessOperations {
                 .withDocuments(documents)
                 .create();
 
-        System.out.println(String.format("Data parser %s started", dataProcess.getId()));
+        System.out.println(String.format("Model %s started", model.getId()));
 
         // 3- Track the progress of the parser job
-        DataProcess.fetcher(dataProcess.getId()).blockUntilFinish();
+        Model.fetcher(model.getId()).blockUntilFinish();
 
         /* 4- Print extraction results
 
@@ -76,7 +76,7 @@ public class DataProcessOperations {
         Governments -> 1.6
 
          */
-        List<Result> results = Result.reader(dataProcess.getId()).read();
+        List<Result> results = Result.reader(model.getId()).read();
         for (Result r : results){
             for (Field f : r.getFields()){
                 System.out.println(f.getStr() + " -> " + f.getFieldValues()[0]);
@@ -84,7 +84,7 @@ public class DataProcessOperations {
         }
 
         // 5- Clean up
-        boolean dataDeleted = DataProcess.deleter(dataProcess.getId()).delete();
+        boolean dataDeleted = Model.deleter(model.getId()).delete();
         boolean dictionaryDeleted = Vocabulary.deleter(vocabulary.getId()).delete();
 
     }

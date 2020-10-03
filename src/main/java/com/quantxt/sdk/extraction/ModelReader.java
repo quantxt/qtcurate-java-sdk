@@ -1,4 +1,4 @@
-package com.quantxt.sdk.dataprocess;
+package com.quantxt.sdk.extraction;
 
 import com.quantxt.sdk.client.HttpMethod;
 import com.quantxt.sdk.client.QTRestClient;
@@ -19,10 +19,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataProcessReader extends Reader<DataProcess> {
+public class ModelReader extends Reader<Model> {
 
     @Override
-    public List<DataProcess> read(QTRestClient client) {
+    public List<Model> read(QTRestClient client) {
         Request request = new Request(HttpMethod.GET, "/users/profile");
 
         Response response = client.request(request);
@@ -52,16 +52,16 @@ public class DataProcessReader extends Reader<DataProcess> {
         }
     }
 
-    private List<DataProcess> getConfigurations(final QTRestClient client, InputStream in) throws IOException {
+    private List<Model> getConfigurations(final QTRestClient client, InputStream in) throws IOException {
         byte[] bytes = in.readAllBytes();
         UserProfileDetailsDto userProfileDetailsDto = client.getObjectMapper().readValue(bytes, UserProfileDetailsDto.class);
         List<ResultConfiguration> settings = userProfileDetailsDto.getSettings();
-        List<DataProcess> dataProcessList = new ArrayList<>();
+        List<Model> dataProcessList = new ArrayList<>();
         if (settings != null){
-            DataProcess [] dataProcesses = new DataProcess[settings.size()];
+            Model [] dataProcesses = new Model[settings.size()];
             for (int i=0; i< settings.size(); i++){
                 ResultConfiguration setting = settings.get(i);
-                DataProcess dataProcess = new DataProcess();
+                Model dataProcess = new Model();
                 dataProcesses[i] = dataProcess;
                 List<Document> documents = new ArrayList<>();
                 for (String f : setting.getFiles()){
