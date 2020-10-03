@@ -1,4 +1,4 @@
-package com.quantxt.sdk.dataprocess;
+package com.quantxt.sdk.extraction;
 
 import com.quantxt.sdk.client.HttpMethod;
 import com.quantxt.sdk.client.QTRestClient;
@@ -9,16 +9,16 @@ import com.quantxt.sdk.exception.QTApiException;
 import com.quantxt.sdk.exception.QTRestException;
 import com.quantxt.sdk.resource.Deleter;
 
-public class DataProcessDeleter extends Deleter<DataProcess> {
+public class ModelDeleter extends Deleter<Model> {
 
     private final String id;
 
     /**
-     * Construct a new DataProcessDeleter.
+     * Construct a new ModelDeleter.
      *
      * @param id The index of the data process resource to delete
      */
-    public DataProcessDeleter(String id) {
+    public ModelDeleter(String id) {
         this.id = id;
     }
 

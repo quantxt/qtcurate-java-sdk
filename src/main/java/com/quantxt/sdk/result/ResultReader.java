@@ -4,7 +4,7 @@ import com.quantxt.sdk.client.HttpMethod;
 import com.quantxt.sdk.client.QTRestClient;
 import com.quantxt.sdk.client.Request;
 import com.quantxt.sdk.client.Response;
-import com.quantxt.sdk.dataprocess.DataProcess;
+import com.quantxt.sdk.extraction.Model;
 import com.quantxt.sdk.exception.QTApiConnectionException;
 import com.quantxt.sdk.exception.QTApiException;
 import com.quantxt.sdk.exception.QTRestException;
@@ -58,21 +58,21 @@ public class ResultReader extends Reader<Result> {
 
         try {
             // Get the settings first
-            List<DataProcess> dataProcesses = DataProcess.reader().read();
-            if (dataProcesses == null) return null;
-            DataProcess dataProcess = null;
-            for (DataProcess dp : dataProcesses){
-                if (dp.getId().equals(id)) {
-                    dataProcess = dp;
+            List<Model> models = Model.reader().read();
+            if (models == null) return null;
+            Model model = null;
+            for (Model m : models){
+                if (m.getId().equals(id)) {
+                    model = m;
                     break;
                 }
             }
-            if (dataProcess == null) {
+            if (model == null) {
                 return null;
             }
             // get types from the extractors
             HashMap<String, Extractor.DataType> dataTypeHashMap = new HashMap<>();
-            for (Extractor extractor : dataProcess.getExtractors()){
+            for (Extractor extractor : model.getExtractors()){
                 if (extractor.getType() != null){
                     dataTypeHashMap.putIfAbsent(extractor.getVocabulary().getId(), extractor.getType());
                 }

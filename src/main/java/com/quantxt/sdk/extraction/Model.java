@@ -1,4 +1,4 @@
-package com.quantxt.sdk.dataprocess;
+package com.quantxt.sdk.extraction;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.quantxt.sdk.document.Document;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DataProcess extends Resource {
+public class Model extends Resource {
 
     private static final long serialVersionUID = 7089357972945039793L;
 
@@ -20,45 +20,45 @@ public class DataProcess extends Resource {
     private Integer numWorkers = 8;
 
     /**
-     * Create a DataProcessCreator to execute create.
+     * Create a ModelCreator to execute create.
      * @param description The description for the data mining job
-     * @return DataProcessCreator capable of executing the create
+     * @return ModelCreator capable of executing the create
      */
-    public static DataProcessCreator creator(String description) {
-        return new DataProcessCreator(description);
+    public static ModelCreator creator(String description) {
+        return new ModelCreator(description);
     }
 
     /**
-     * Create a DataProcessFetcher to execute fetch.
+     * Create a ModelFetcher to execute fetch.
      *
      * @param id The ID that identifies the resource to fetch
-     * @return DataProcessFetcher capable of executing the fetch
+     * @return ModelFetcher capable of executing the fetch
      */
-    public static DataProcessFetcher fetcher(String id) {
-        return new DataProcessFetcher(id);
+    public static ModelFetcher fetcher(String id) {
+        return new ModelFetcher(id);
     }
 
     /**
-     * Create a DataProcessDeleter to execute delete.
+     * Create a ModelDeleter to execute delete.
      *
-     * @param id The id of the DataProcess resource to delete
-     * @return DataProcessDeleter capable of executing the delete
+     * @param id The id of the Model resource to delete
+     * @return ModelDeleter capable of executing the delete
      */
 
     /**
-     * Create a DataProcessReader to get list of available dataprocesses.
+     * Create a ModelReader to get list of available dataprocesses.
      *
-     * @return DataProcessReader capable of executing the read
+     * @return ModelReader capable of executing the read
      */
-    public static DataProcessReader reader() {
-        return new DataProcessReader();
+    public static ModelReader reader() {
+        return new ModelReader();
     }
 
-    public static DataProcessDeleter deleter(String id) {
-        return new DataProcessDeleter(id);
+    public static ModelDeleter deleter(String id) {
+        return new ModelDeleter(id);
     }
 
-    public DataProcess() {
+    public Model() {
         this.extractors = new ArrayList<>();
         this.documents = new ArrayList<>();
     }
@@ -92,9 +92,9 @@ public class DataProcess extends Resource {
     }
 
     /**
-     * Returns DataProcess ID.
+     * Returns Model ID.
      *
-     * @return DataProcess ID.
+     * @return Model ID.
      */
     public String getId() {
         return id;
@@ -120,7 +120,7 @@ public class DataProcess extends Resource {
 
     @Override
     public String toString() {
-        return "DataProcess{" +
+        return "Model{" +
                 "id='" + id + '\'' +
                 ", description='" + description + '\'' +
                 ", extractors=" + extractors +
