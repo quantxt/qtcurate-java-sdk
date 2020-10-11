@@ -1,4 +1,4 @@
-package com.quantxt.sdk.extraction;
+package com.quantxt.sdk.extraction.model;
 
 import com.quantxt.sdk.client.HttpMethod;
 import com.quantxt.sdk.client.QTRestClient;
@@ -8,7 +8,9 @@ import com.quantxt.sdk.document.Document;
 import com.quantxt.sdk.exception.QTApiConnectionException;
 import com.quantxt.sdk.exception.QTApiException;
 import com.quantxt.sdk.exception.QTRestException;
-import com.quantxt.sdk.model.*;
+import com.quantxt.sdk.model.DictionaryDto;
+import com.quantxt.sdk.model.Extractor;
+import com.quantxt.sdk.model.ResultConfiguration;
 import com.quantxt.sdk.progress.Progress;
 import com.quantxt.sdk.resource.Fetcher;
 import org.slf4j.Logger;

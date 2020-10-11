@@ -1,4 +1,4 @@
-package com.quantxt.sdk.extraction;
+package com.quantxt.sdk.extraction.model;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,8 +10,8 @@ import com.quantxt.sdk.document.Document;
 import com.quantxt.sdk.exception.QTApiConnectionException;
 import com.quantxt.sdk.exception.QTApiException;
 import com.quantxt.sdk.exception.QTRestException;
-import com.quantxt.sdk.model.Extractor;
 import com.quantxt.sdk.model.DictionaryDto;
+import com.quantxt.sdk.model.Extractor;
 import com.quantxt.sdk.model.SearchRequestDto;
 import com.quantxt.sdk.resource.Creator;
 
@@ -30,6 +30,11 @@ public class ModelCreator extends Creator<Model> {
 
     public ModelCreator withNumWorkers(Integer numWorkers) {
         this.model.setNumWorkers(numWorkers);
+        return this;
+    }
+
+    public ModelCreator withLangs(String [] langs) {
+        this.model.setOcrLangs(langs);
         return this;
     }
 
@@ -61,6 +66,30 @@ public class ModelCreator extends Creator<Model> {
         return this;
     }
 
+    private Request createModel(QTRestClient client){
+        Request request = new Request(HttpMethod.POST, "/search/new");
+        addPayload(request, client);
+        return request;
+    }
+
+    private Request createJob(QTRestClient client){
+        String model_id = model.getId();
+        Request request = new Request(HttpMethod.POST, "/search/new/" + model_id);
+        SearchRequestDto searchRequestDto = new SearchRequestDto();
+        List<String> files = new ArrayList<>();
+        for (Document document : model.getDocuments()){
+            files.add(document.getId());
+        }
+        searchRequestDto.setTitle(model.getDescription());
+        searchRequestDto.setFiles(files);
+        try {
+            request.setBody(client.getObjectMapper().writeValueAsString(searchRequestDto));
+        } catch (JsonProcessingException e) {
+            throw new QTApiException(e.getMessage(), e);
+        }
+        return request;
+    }
+
     /**
      * Make the request to the API to perform the create.
      *
@@ -69,9 +98,7 @@ public class ModelCreator extends Creator<Model> {
      */
     @Override
     public Model create(QTRestClient client) {
-        Request request = new Request(HttpMethod.POST, "/search/new");
-        addPayload(request, client);
-
+        Request request = model.getId() == null ? createModel(client) : createJob(client);
         Response response = client.request(request);
 
         if (response == null) {
@@ -117,6 +144,7 @@ public class ModelCreator extends Creator<Model> {
             searchRequestDto.setFiles(files);
             searchRequestDto.setNumWorkers(model.getNumWorkers());
             searchRequestDto.setTitle(model.getDescription());
+            searchRequestDto.setOcrLangs(model.getOcrLangs());
             // convert dictionaries
             List<DictionaryDto> dictionaryDtos = new ArrayList<>();
             for (Extractor extractor : model.getExtractors()){

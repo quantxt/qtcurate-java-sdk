@@ -1,4 +1,4 @@
-package com.quantxt.sdk.extraction;
+package com.quantxt.sdk.extraction.model;
 
 import com.quantxt.sdk.client.HttpMethod;
 import com.quantxt.sdk.client.QTRestClient;

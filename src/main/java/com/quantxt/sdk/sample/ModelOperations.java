@@ -1,7 +1,7 @@
 package com.quantxt.sdk.sample;
 
 import com.quantxt.sdk.client.QT;
-import com.quantxt.sdk.extraction.Model;
+import com.quantxt.sdk.extraction.model.Model;
 import com.quantxt.sdk.vocabulary.Vocabulary;
 import com.quantxt.sdk.vocabulary.VocabularyEntry;
 import com.quantxt.sdk.document.Document;

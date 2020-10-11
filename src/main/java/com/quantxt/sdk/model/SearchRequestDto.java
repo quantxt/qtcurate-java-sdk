@@ -12,6 +12,16 @@ public class SearchRequestDto {
     private Boolean excludeUttWithoutEntities = true;
     private String chunk = "PAGE";
 
+    public String[] getOcrLangs() {
+        return ocrLangs;
+    }
+
+    public void setOcrLangs(String[] ocrLangs) {
+        this.ocrLangs = ocrLangs;
+    }
+
+    private String [] ocrLangs;
+
     public SearchRequestDto() {
     }
 

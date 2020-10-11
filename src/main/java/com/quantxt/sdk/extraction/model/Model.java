@@ -1,4 +1,4 @@
-package com.quantxt.sdk.extraction;
+package com.quantxt.sdk.extraction.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.quantxt.sdk.document.Document;
@@ -15,6 +15,7 @@ public class Model extends Resource {
 
     private String id;
     private String description;
+    private String [] ocrLangs;
     private List<Extractor> extractors;
     private List<Document> documents;
     private Integer numWorkers = 8;
@@ -126,5 +127,13 @@ public class Model extends Resource {
                 ", extractors=" + extractors +
                 ", documents=" + documents +
                 '}';
+    }
+
+    public String[] getOcrLangs() {
+        return ocrLangs;
+    }
+
+    public void setOcrLangs(String[] ocrLangs) {
+        this.ocrLangs = ocrLangs;
     }
 }

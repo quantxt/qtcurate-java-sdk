@@ -1,4 +1,4 @@
-package com.quantxt.sdk.extraction;
+package com.quantxt.sdk.extraction.model;
 
 import com.quantxt.sdk.client.HttpMethod;
 import com.quantxt.sdk.client.QTRestClient;
@@ -58,7 +58,7 @@ public class ModelReader extends Reader<Model> {
         List<ResultConfiguration> settings = userProfileDetailsDto.getSettings();
         List<Model> dataProcessList = new ArrayList<>();
         if (settings != null){
-            Model [] dataProcesses = new Model[settings.size()];
+            Model[] dataProcesses = new Model[settings.size()];
             for (int i=0; i< settings.size(); i++){
                 ResultConfiguration setting = settings.get(i);
                 Model dataProcess = new Model();
